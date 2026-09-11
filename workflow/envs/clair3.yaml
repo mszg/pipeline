@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - clair3
+  - samtools
+  - bcftools
+  - htslib

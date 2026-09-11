@@ -1,0 +1,18 @@
+# Snakemake runtime
+.snakemake/
+results/
+
+# Real sequencing data
+data/*
+!data/README.txt
+
+# Local reference sequences
+resources/references/*
+!resources/references/README.txt
+
+# Local backups / editor files
+*.backup
+__pycache__/
+*.pyc
+.vscode/
+.DS_Store

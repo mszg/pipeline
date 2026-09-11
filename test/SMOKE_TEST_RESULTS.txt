@@ -1,0 +1,17 @@
+Blood-group Snakemake v0.2 smoke test
+=====================================
+PASS: combined 2 uncompressed .fastq chunks (fragment1) -> 3 reads
+PASS: combined mixed .fastq.gz + .fastq chunks (fragment2) -> 2 reads
+PASS: combined .fastq.gz input (fragment3) -> 1 read
+PASS: output FASTQs are valid gzip streams and contain complete 4-line FASTQ records
+PASS: workflow Python helper scripts compile
+PASS: config YAML parses
+PASS: sample TSV schema parses and contains 3 amplicons
+
+NOT RUN in this environment:
+- Snakemake DAG/dry-run (Snakemake is not installed here)
+- NanoPlot
+- minimap2/samtools mapping
+- Clair3 / WhatsHap
+
+The biological first run therefore still needs the actual FASTQs + ABO reference (or execution locally under WSL2).

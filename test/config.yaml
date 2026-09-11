@@ -1,0 +1,22 @@
+samples: "test/samples.tsv"
+workflow:
+  run_variant_calling: false
+  run_phasing: false
+  run_consensus: false
+filtering:
+  enabled: false
+  min_length: 1
+  max_length: 1000
+  min_mean_q: 1
+  keep_percent: 100
+mapping:
+  preset: "map-ont"
+  threads: 2
+clair3:
+  threads: 2
+  platform: "ont"
+  model_path: "/not/used/in/core-test"
+  executable: "run_clair3.sh"
+  extra: ""
+phasing:
+  threads: 2
