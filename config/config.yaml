@@ -1,10 +1,9 @@
-# Long-range ONT amplicon pipeline v0.3
+# Long-range ONT amplicon pipeline v0.4
 samples: "config/samples.tsv"
 
 workflow:
-  # Keep disabled until the correct Clair3 ONT model is configured and
-  # the cleaned mapping/QC outputs have been reviewed.
-  run_variant_calling: false
+  # v0.4 constrains Clair3 to primer-defined target intervals.
+  run_variant_calling: true
   run_phasing: false
   run_consensus: false
 
@@ -33,11 +32,16 @@ qc:
   core_depth_threshold: 20
 
 clair3:
+  # Safety default for a targeted amplicon workflow: every amplicon must have
+  # target_region defined before variant calling can be enabled.
+  require_target_regions: true
+  clair3:
   threads: 8
   platform: "ont"
-  model_path: "/path/to/clair3_models/ont"
+  model_name: "r1041_e82_400bps_hac_v520"
   executable: "run_clair3.sh"
-  extra: ""
+  require_target_regions: true
+  extra: "--var_pct_full=1 --ref_pct_full=1 --var_pct_phasing=1 --enable_variant_calling_at_sequence_head_and_tail"
 
 phasing:
   threads: 4

@@ -162,10 +162,41 @@ use_filtered = bool(config.get("filtering", {}).get("enabled", False))
 run_variants = bool(config.get("workflow", {}).get("run_variant_calling", False))
 run_phasing = bool(config.get("workflow", {}).get("run_phasing", False)) and run_variants
 run_consensus = bool(config.get("workflow", {}).get("run_consensus", False)) and run_phasing
+require_target_regions = bool(config.get("clair3", {}).get("require_target_regions", True))
+
+
+def analysis_has_target_regions(analysis):
+    return any(UNITS[u].get("target_region", "") for u in ANALYSES[analysis])
+
+
+def clair3_bed_arg(wc):
+    if analysis_has_target_regions(wc.analysis):
+        return f"--bed_fn=results/targets/{wc.analysis}/{wc.analysis}.bed"
+    return ""
+
+
+def bcftools_target_arg(wc):
+    if analysis_has_target_regions(wc.analysis):
+        return f"-T results/targets/{wc.analysis}/{wc.analysis}.bed"
+    return ""
+
+
+if run_variants and require_target_regions:
+    missing_targets = [
+        u for u in UNIT_IDS if not UNITS[u].get("target_region", "")
+    ]
+    if missing_targets:
+        raise ValueError(
+            "Clair3 target-aware calling is enabled but target_region is missing for: "
+            + ", ".join(missing_targets)
+            + ". Define CONTIG:START-END for every amplicon in config/samples.tsv "
+            + "or set clair3.require_target_regions: false to allow unrestricted calling."
+        )
 
 include: "workflow/rules/input.smk"
 include: "workflow/rules/qc.smk"
 include: "workflow/rules/mapping.smk"
+include: "workflow/rules/targets.smk"
 include: "workflow/rules/variants.smk"
 include: "workflow/rules/phasing.smk"
 include: "workflow/rules/consensus.smk"
@@ -186,6 +217,8 @@ final_targets += expand("results/mapping/genes/{analysis}/{analysis}.coverage.tx
 final_targets += expand("results/mapping/genes/{analysis}/{analysis}.variant.bam.bai", analysis=ANALYSIS_IDS)
 final_targets += expand("results/mapping/genes/{analysis}/{analysis}.variant.coverage.txt", analysis=ANALYSIS_IDS)
 final_targets += expand("results/mapping/genes/{analysis}/{analysis}.phasing.bam.bai", analysis=ANALYSIS_IDS)
+final_targets += expand("results/targets/{analysis}/{analysis}.bed", analysis=ANALYSIS_IDS)
+final_targets += expand("results/targets/{analysis}/{analysis}.target_regions.tsv", analysis=ANALYSIS_IDS)
 final_targets += [
     "results/summary/amplicon_summary.tsv",
     "results/summary/gene_summary.tsv",

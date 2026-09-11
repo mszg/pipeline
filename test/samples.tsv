@@ -1,4 +1,4 @@
 sample	gene	amplicon	fastq_input	reference	target_region	phasing_min_length	core_depth_threshold
-TEST01	ABO	fragment1	test/data/ABO_Fragment_1	test/reference.fasta		1	1
-TEST01	ABO	fragment2	test/data/ABO_Fragment_2	test/reference.fasta		1	1
-TEST01	ABO	fragment3	test/data/ABO_Fragment_3	test/reference.fasta		1	1
+TEST01	ABO	fragment1	test/data/ABO_Fragment_1	test/reference.fasta	ABO_TEST:1-32	1	1
+TEST01	ABO	fragment2	test/data/ABO_Fragment_2	test/reference.fasta	ABO_TEST:25-48	1	1
+TEST01	ABO	fragment3	test/data/ABO_Fragment_3	test/reference.fasta	ABO_TEST:40-64	1	1

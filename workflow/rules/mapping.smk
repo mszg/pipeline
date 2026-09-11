@@ -105,7 +105,8 @@ rule amplicon_alignment_qc:
 
 
 # Small-variant analysis BAM: primary mapped reads only, MAPQ-filtered.
-# Optional target_region is interpreted as CONTIG:START-END (1-based inclusive).
+# Target coordinates are NOT applied at BAM level in v0.4; they are passed
+# explicitly to Clair3 as a BED calling interval so the BAM retains alignment context.
 rule filter_variant_bam:
     input:
         bam="results/mapping/amplicons/{unit}/{unit}.sorted.bam"
@@ -116,7 +117,7 @@ rule filter_variant_bam:
     params:
         min_mapq=lambda wc: int(config["mapping"].get("variant_min_mapq", 30)),
         min_read_length=0,
-        target_region=target_region_for_unit,
+        target_region="",
         allow_empty=False
     conda:
         "../envs/bam_qc.yaml"
@@ -171,6 +172,8 @@ rule core_intervals:
 
 
 # Phasing BAM: same primary/MAPQ cleanup plus a configurable long-read threshold.
+# It also retains alignment context outside the calling BED; WhatsHap receives only
+# variants produced inside the explicit Clair3 target intervals.
 rule filter_phasing_bam:
     input:
         bam="results/mapping/amplicons/{unit}/{unit}.sorted.bam"
@@ -181,7 +184,7 @@ rule filter_phasing_bam:
     params:
         min_mapq=lambda wc: int(config["mapping"].get("phasing_min_mapq", 30)),
         min_read_length=phasing_min_length_for_unit,
-        target_region=target_region_for_unit,
+        target_region="",
         allow_empty=True
     conda:
         "../envs/bam_qc.yaml"

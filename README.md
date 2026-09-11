@@ -1,27 +1,33 @@
-# Long-range ONT Snakemake pipeline — v0.3
+# Long-range ONT Snakemake pipeline — v0.4
 
 This workflow is for targeted Oxford Nanopore long-range amplicon sequencing. It currently supports the real ABO test dataset used during development: one patient, one gene, three overlapping PCR amplicons, and many FASTQ chunks per amplicon.
 
-## v0.3 patch
+## v0.4 patch
 
-v0.3 keeps the raw alignment outputs from v0.2, but adds an explicit separation between **raw mapping**, **small-variant analysis**, and **phasing**.
+v0.4 makes the primer-defined amplicon coordinates the explicit **variant-calling intervals**. The cleaned BAMs remain alignment-quality filters rather than coordinate-clipped BAMs. This preserves useful alignment context while preventing Clair3 from calling outside the intended PCR targets.
 
-The change was motivated by the first real ABO run. Fragment 1 contained many short/truncated reads and large numbers of secondary/supplementary alignments, while reads approaching the expected full amplicon length mapped much more confidently. The pipeline now measures that behavior instead of treating every alignment record as equivalent.
+The change follows validation against the real ABO dataset. Primer mapping to `NG_006669.2` gave:
 
-### New in v0.3
+```text
+fragment1  NG_006669.2:4228-18285   14,058 bp
+fragment2  NG_006669.2:11479-24671  13,193 bp
+fragment3  NG_006669.2:19001-32388  13,388 bp
+```
 
-- reports **primary mapped reads** rather than relying only on raw `samtools flagstat` mapping percentages;
-- reports primary mappings at **MAPQ >=20, >=30 and >=50**;
-- reports **secondary and supplementary alignment counts**;
-- produces a **read-length vs MAPQ** QC table for every amplicon;
-- creates a dedicated **variant BAM** containing only primary, mapped, MAPQ-filtered alignments;
-- creates a separate **phasing BAM** that additionally enriches for long reads;
-- supports an optional per-amplicon `target_region` such as `NG_006669.2:4000-18500`;
-- calculates contiguous **high-depth core intervals** from the cleaned variant BAM;
-- keeps all raw BAMs intact for traceability and future structural-variant analyses;
-- Clair3 now consumes the cleaned gene-level variant BAM;
-- WhatsHap now consumes the long-read-enriched gene-level phasing BAM;
-- the new BAM QC/filtering Python environment is pinned to Python 3.12 for reproducibility without changing the already validated minimap2/samtools environment.
+These independently defined intervals agreed with the v0.3 high-depth intervals to within 0-3 bp at the amplicon boundaries.
+
+### New in v0.4
+
+- `target_region` is no longer used to discard/retain whole BAM alignments;
+- primary/MAPQ-filtered variant BAMs retain their complete alignments;
+- long-read phasing BAMs likewise retain alignment context;
+- per-amplicon 1-based target coordinates are converted into an auditable target manifest;
+- overlapping target regions are merged into a standards-compliant **0-based, half-open BED** for each patient+gene analysis;
+- Clair3 receives that BED through `--bed_fn`;
+- normalized VCF output is restricted to the same BED again with `bcftools view -R` as a defensive post-calling check;
+- `clair3.require_target_regions: true` prevents targeted variant calling from being enabled accidentally when an amplicon lacks a target definition.
+
+v0.3's alignment QC remains unchanged: primary mapping rates, MAPQ distributions, secondary/supplementary counts, length-vs-MAPQ QC, observed core intervals, variant BAMs, and long-read phasing BAMs are all retained.
 
 ## Input handling
 
@@ -42,12 +48,11 @@ Compressed and uncompressed FASTQs can be mixed. All chunks belonging to one amp
 FASTQ chunks
      │
      ├─ combine + NanoPlot QC
-     │
      ▼
   minimap2
      │
      ▼
-RAW sorted BAM  ─────────────── retained unchanged
+RAW sorted BAM ───────────────────────── retained unchanged
      │
      ├─ alignment QC
      │    ├─ primary mapped %
@@ -55,45 +60,56 @@ RAW sorted BAM  ─────────────── retained unchanged
      │    ├─ secondary/supplementary counts
      │    └─ length-vs-MAPQ table
      │
-     ├──────────────────────────────────┐
-     ▼                                  ▼
-VARIANT BAM                         PHASING BAM
-primary only                        primary only
-mapped only                         mapped only
-MAPQ >=30                           MAPQ >=30
-no length cutoff                    long-read enriched (default >=8 kb)
-optional target region              optional target region
-     │                                  │
-     ├─ coverage/depth QC               │
-     ├─ core interval detection         │
-     │                                  │
-     ▼                                  ▼
-merge by patient+gene              merge by patient+gene
-     │                                  │
-     ▼                                  ▼
-Clair3                              WhatsHap
-     │                                  ▲
-     └──────────── VCF ─────────────────┘
+     ├──────────────────────────────┐
+     ▼                              ▼
+VARIANT BAM                     PHASING BAM
+primary + mapped                primary + mapped
+MAPQ >=30                       MAPQ >=30
+no length cutoff                long-read enriched
+full alignment retained         full alignment retained
+     │                              │
+     └──────────────┐               │
+                    ▼               │
+primer target regions             │
+(samples.tsv)                      │
+      │                            │
+      ▼                            │
+merged target BED                  │
+      │                            │
+      ▼                            │
+   Clair3 --bed_fn                 │
+      │                            │
+      ▼                            │
+ target-restricted VCF ────────────┘
+      │                            ▼
+      └─────────────────────── WhatsHap
+                                   │
+                                   ▼
+                              phased VCF
 ```
 
-Clair3/WhatsHap remain disabled by default until the correct ONT Clair3 model is configured.
+Clair3/WhatsHap remain disabled by default until the appropriate ONT Clair3 model is configured.
 
 ## Current ABO configuration
 
-`config/samples.tsv` contains:
+The primer-derived target coordinates are stored directly in `config/samples.tsv`:
 
 ```tsv
-sample  gene  amplicon   fastq_input                                      reference                               target_region  phasing_min_length  core_depth_threshold
-P001    ABO   fragment1  data/ABO_Fragment_1-20260911T075013Z-1-001       resources/references/ABO_reference.fasta                 8000                50
-P001    ABO   fragment2  data/ABO_Fragment_2-20260911T075014Z-1-001       resources/references/ABO_reference.fasta                 8000                50
-P001    ABO   fragment3  data/ABO_Fragment_3-20260911T075016Z-1-001       resources/references/ABO_reference.fasta                 8000                20
+sample  gene  amplicon   target_region                  phasing_min_length  core_depth_threshold
+P001    ABO   fragment1  NG_006669.2:4228-18285        8000                50
+P001    ABO   fragment2  NG_006669.2:11479-24671       8000                50
+P001    ABO   fragment3  NG_006669.2:19001-32388       8000                20
 ```
 
-The file is tab-separated. `target_region` is deliberately blank for the present dataset. The intervals observed from coverage should **not** automatically be treated as the expected PCR coordinates. Once the exact primer-derived amplicon coordinates are available, they can be entered as, for example:
+The full file also contains each FASTQ input and reference path. Coordinates in `samples.tsv` are **1-based inclusive**, matching conventional genomic-region notation. The workflow converts them to BED coordinates automatically.
+
+For the current ABO dataset, the three overlapping target regions merge to:
 
 ```text
-NG_006669.2:4225-18287
+NG_006669.2  4227  32388
 ```
+
+in BED format (0-based start, half-open end). The original three amplicon intervals remain recorded in `results/targets/P001__ABO/P001__ABO.target_regions.tsv`.
 
 The per-amplicon `core_depth_threshold` values of 50/50/20 are QC thresholds selected for the current ABO test data; they are not universal biological cutoffs.
 
@@ -122,7 +138,7 @@ The variant BAM excludes:
 - supplementary alignments;
 - primary alignments below the configured MAPQ threshold.
 
-It deliberately does **not** apply a minimum read-length cutoff by default, because shorter reads can still contain valid local SNP/indel evidence.
+It deliberately does **not** apply a minimum read-length cutoff by default, because shorter reads can still contain valid local SNP/indel evidence. It also does not clip or restrict alignments to the target coordinates; target restriction is performed explicitly at the variant-calling stage.
 
 ### Phasing BAM
 
@@ -134,6 +150,9 @@ The phasing BAM uses the same alignment cleanup and additionally requires a conf
 results/summary/input_manifest.tsv
 results/summary/amplicon_summary.tsv
 results/summary/gene_summary.tsv
+
+results/targets/<analysis>/<analysis>.bed
+results/targets/<analysis>/<analysis>.target_regions.tsv
 
 results/qc/raw/<unit>/NanoStats.txt
 results/qc/alignment/<unit>/<unit>.alignment_qc.tsv
@@ -185,9 +204,9 @@ results/qc/alignment/P001__ABO__fragment1/P001__ABO__fragment1.length_mapq.tsv
 
 ## Variant calling
 
-Do not enable Clair3 until `clair3.model_path` points to the correct ONT model for the basecalling chemistry/model used for the sequencing run.
+Target-aware Clair3 calling is implemented, but disabled by default until `clair3.model_path` points to the appropriate ONT model for the basecalling chemistry/model used for the sequencing run.
 
-Once configured:
+When enabled:
 
 ```yaml
 workflow:
@@ -196,17 +215,22 @@ workflow:
   run_consensus: true
 ```
 
-Clair3 will use:
+Clair3 consumes:
 
 ```text
 results/mapping/genes/P001__ABO/P001__ABO.variant.bam
+results/targets/P001__ABO/P001__ABO.bed
 ```
 
-and WhatsHap will use:
+and is invoked with `--bed_fn`, so variant generation is limited to the primer-defined target union. The normalized VCF is restricted to the same BED once more using `bcftools view -R`.
+
+WhatsHap consumes the resulting target-restricted VCF together with:
 
 ```text
 results/mapping/genes/P001__ABO/P001__ABO.phasing.bam
 ```
+
+By default, `clair3.require_target_regions: true`. Therefore variant calling will fail at workflow construction if any configured amplicon lacks `target_region`. Set it to `false` only for an intentionally unrestricted analysis.
 
 ## Reference
 

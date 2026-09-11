@@ -3,7 +3,8 @@ rule clair3_call:
         bam="results/mapping/genes/{analysis}/{analysis}.variant.bam",
         bai="results/mapping/genes/{analysis}/{analysis}.variant.bam.bai",
         ref="results/reference/{analysis}/reference.fasta",
-        fai="results/reference/{analysis}/reference.fasta.fai"
+        fai="results/reference/{analysis}/reference.fasta.fai",
+        bed="results/targets/{analysis}/{analysis}.bed"
     output:
         vcf="results/variants/{analysis}/clair3/merge_output.vcf.gz",
         tbi="results/variants/{analysis}/clair3/merge_output.vcf.gz.tbi"
@@ -15,9 +16,10 @@ rule clair3_call:
         lambda wc: int(config["clair3"]["threads"])
     params:
         executable=lambda wc: config["clair3"]["executable"],
-        model=lambda wc: config["clair3"]["model_path"],
+        model_name=lambda wc: config["clair3"]["model_name"],
         platform=lambda wc: config["clair3"]["platform"],
         extra=lambda wc: config["clair3"].get("extra", ""),
+        bed_arg=clair3_bed_arg,
         outdir=lambda wc: f"results/variants/{wc.analysis}/clair3"
     shell:
         r"""
@@ -26,10 +28,10 @@ rule clair3_call:
           --bam_fn={input.bam:q} \
           --ref_fn={input.ref:q} \
           --threads={threads} \
-          --platform={params.platform:q} \
-          --model_path={params.model:q} \
+          --model_path="$(dirname "$(command -v run_clair3.sh)")/models/{params.model_name}" \
           --output={params.outdir:q} \
           --sample_name={wildcards.analysis:q} \
+          {params.bed_arg} \
           {params.extra} \
           > {log:q} 2>&1
         test -s {output.vcf:q}
@@ -41,14 +43,18 @@ rule normalize_variants:
     input:
         vcf="results/variants/{analysis}/clair3/merge_output.vcf.gz",
         ref="results/reference/{analysis}/reference.fasta",
-        fai="results/reference/{analysis}/reference.fasta.fai"
+        fai="results/reference/{analysis}/reference.fasta.fai",
+        bed="results/targets/{analysis}/{analysis}.bed"
     output:
         vcf="results/variants/{analysis}/{analysis}.norm.vcf.gz",
         tbi="results/variants/{analysis}/{analysis}.norm.vcf.gz.tbi"
+    params:
+        target_arg=bcftools_target_arg
     conda:
         "../envs/variants.yaml"
     shell:
         r"""
-        bcftools norm -f {input.ref:q} -m -any {input.vcf:q} -Oz -o {output.vcf:q}
+        bcftools norm -f {input.ref:q} -m -any {input.vcf:q} -Ou \
+          | bcftools view {params.target_arg} -Oz -o {output.vcf:q}
         tabix -f -p vcf {output.vcf:q}
         """

@@ -1,4 +1,4 @@
 sample	gene	amplicon	fastq_input	reference	target_region	phasing_min_length	core_depth_threshold
-P001	ABO	fragment1	data/ABO_Fragment_1-20260911T075013Z-1-001	resources/references/ABO_reference.fasta		8000	50
-P001	ABO	fragment2	data/ABO_Fragment_2-20260911T075014Z-1-001	resources/references/ABO_reference.fasta		8000	50
-P001	ABO	fragment3	data/ABO_Fragment_3-20260911T075016Z-1-001	resources/references/ABO_reference.fasta		8000	20
+P001	ABO	fragment1	data/ABO_Fragment_1-20260911T075013Z-1-001	resources/references/ABO_reference.fasta	NG_006669.2:4228-18285	8000	50
+P001	ABO	fragment2	data/ABO_Fragment_2-20260911T075014Z-1-001	resources/references/ABO_reference.fasta	NG_006669.2:11479-24671	8000	50
+P001	ABO	fragment3	data/ABO_Fragment_3-20260911T075016Z-1-001	resources/references/ABO_reference.fasta	NG_006669.2:19001-32388	8000	20

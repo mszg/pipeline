@@ -18,6 +18,7 @@ mapping:
 qc:
   core_depth_threshold: 1
 clair3:
+  require_target_regions: true
   threads: 2
   platform: "ont"
   model_path: "/not/used/in/core-test"
