@@ -55,3 +55,36 @@ def parse_coverage(path):
     coverage = sum(length * cov for length, cov, depth in rows) / total_len
     depth = sum(length * depth for length, cov, depth in rows) / total_len
     return f"{coverage:.4f}", f"{depth:.4f}"
+
+
+def parse_metric_tsv(path):
+    """Parse a two-column metric/value TSV."""
+    out = {}
+    lines = Path(path).read_text(errors="replace").splitlines()
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        parts = line.split("\t", 1)
+        if len(parts) == 2:
+            out[parts[0]] = parts[1]
+    return out
+
+
+def longest_interval(path):
+    """Return longest core interval as (region, length, threshold), or NAs."""
+    best = None
+    lines = Path(path).read_text(errors="replace").splitlines()
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        vals = line.split("\t")
+        if len(vals) < 5:
+            continue
+        contig, start, end, length, threshold = vals[:5]
+        try:
+            length_i = int(length)
+        except ValueError:
+            continue
+        if best is None or length_i > best[1]:
+            best = (f"{contig}:{start}-{end}", length_i, threshold)
+    return best if best is not None else ("NA", "NA", "NA")

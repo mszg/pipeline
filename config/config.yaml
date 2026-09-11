@@ -1,13 +1,14 @@
-# Long-range ONT amplicon pipeline v0.2
+# Long-range ONT amplicon pipeline v0.3
 samples: "config/samples.tsv"
 
 workflow:
-  # Start with the core workflow. Enable these after mapping/QC is validated
-  # and the correct Clair3 model has been configured.
+  # Keep disabled until the correct Clair3 ONT model is configured and
+  # the cleaned mapping/QC outputs have been reviewed.
   run_variant_calling: false
   run_phasing: false
   run_consensus: false
 
+# Optional FASTQ-level filtering. Raw input is never modified.
 filtering:
   enabled: false
   min_length: 1000
@@ -18,6 +19,18 @@ filtering:
 mapping:
   preset: "map-ont"
   threads: 8
+
+  # Small-variant BAM: primary + mapped + MAPQ >= this threshold.
+  variant_min_mapq: 30
+
+  # Phasing BAM: same cleanup, but long-read enriched.
+  phasing_min_mapq: 30
+  phasing_min_length: 8000
+
+qc:
+  # Used to find contiguous high-depth intervals in each cleaned amplicon BAM.
+  # Can be overridden per amplicon in config/samples.tsv.
+  core_depth_threshold: 20
 
 clair3:
   threads: 8

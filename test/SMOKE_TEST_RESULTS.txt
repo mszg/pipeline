@@ -1,17 +1,19 @@
-Blood-group Snakemake v0.2 smoke test
-=====================================
-PASS: combined 2 uncompressed .fastq chunks (fragment1) -> 3 reads
-PASS: combined mixed .fastq.gz + .fastq chunks (fragment2) -> 2 reads
-PASS: combined .fastq.gz input (fragment3) -> 1 read
-PASS: output FASTQs are valid gzip streams and contain complete 4-line FASTQ records
+Blood-group Snakemake v0.3 static/smoke checks
+===============================================
+PASS: universal FASTQ input layer retained (.fastq/.fastq.gz/.fq/.fq.gz)
 PASS: workflow Python helper scripts compile
 PASS: config YAML parses
-PASS: sample TSV schema parses and contains 3 amplicons
+PASS: sample TSV schema parses with optional target/QC columns
+PASS: target_region syntax CONTIG:START-END validates
+PASS: variant/phasing BAM filtering scripts are included
+PASS: enhanced alignment QC + length/MAPQ QC scripts are included
+PASS: core high-depth interval detection script is included
 
-NOT RUN in this environment:
-- Snakemake DAG/dry-run (Snakemake is not installed here)
-- NanoPlot
-- minimap2/samtools mapping
+NOT RUN in this build environment:
+- Full Snakemake DAG/dry-run (Snakemake is not installed here)
+- pysam-backed BAM filtering/QC (pysam is installed by workflow/envs/mapping.yaml at runtime)
+- minimap2/samtools/NanoPlot
 - Clair3 / WhatsHap
 
-The biological first run therefore still needs the actual FASTQs + ABO reference (or execution locally under WSL2).
+The patch is intended to be applied to the already successful v0.2 real-data run;
+Snakemake should reuse valid raw outputs and create only the new v0.3 derived outputs.

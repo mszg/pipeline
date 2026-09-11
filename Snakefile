@@ -9,6 +9,7 @@ SAMPLES_TSV = config.get("samples", "config/samples.tsv")
 
 SAFE_ID = re.compile(r"^[A-Za-z0-9._-]+$")
 FASTQ_SUFFIXES = (".fastq", ".fastq.gz", ".fq", ".fq.gz")
+REGION_RE = re.compile(r"^([^:\s]+):(\d+)-(\d+)$")
 
 
 def clean_id(value, column):
@@ -35,6 +36,14 @@ with open(SAMPLES_TSV, newline="") as handle:
         row["sample"] = clean_id(row["sample"], "sample")
         row["gene"] = clean_id(row["gene"], "gene")
         row["amplicon"] = clean_id(row["amplicon"], "amplicon")
+        row.setdefault("target_region", "")
+        row.setdefault("phasing_min_length", "")
+        row.setdefault("core_depth_threshold", "")
+        if row["target_region"] and not REGION_RE.match(row["target_region"]):
+            raise ValueError(
+                f"Invalid target_region={row['target_region']!r} for {row['sample']}/{row['gene']}/{row['amplicon']}; "
+                "expected CONTIG:START-END"
+            )
         row["analysis"] = f'{row["sample"]}__{row["gene"]}'
         row["unit"] = f'{row["analysis"]}__{row["amplicon"]}'
         rows.append(row)
@@ -123,6 +132,32 @@ def amplicon_bams_for_analysis(wc):
     return [f"results/mapping/amplicons/{u}/{u}.sorted.bam" for u in ANALYSES[wc.analysis]]
 
 
+def variant_bams_for_analysis(wc):
+    return [f"results/mapping/amplicons/{u}/{u}.variant.bam" for u in ANALYSES[wc.analysis]]
+
+
+def phasing_bams_for_analysis(wc):
+    return [f"results/mapping/amplicons/{u}/{u}.phasing.bam" for u in ANALYSES[wc.analysis]]
+
+
+def target_region_for_unit(wc):
+    return UNITS[wc.unit].get("target_region", "") or ""
+
+
+def phasing_min_length_for_unit(wc):
+    value = UNITS[wc.unit].get("phasing_min_length", "")
+    if value:
+        return int(value)
+    return int(config.get("mapping", {}).get("phasing_min_length", 8000))
+
+
+def core_depth_threshold_for_unit(wc):
+    value = UNITS[wc.unit].get("core_depth_threshold", "")
+    if value:
+        return int(value)
+    return int(config.get("qc", {}).get("core_depth_threshold", 20))
+
+
 use_filtered = bool(config.get("filtering", {}).get("enabled", False))
 run_variants = bool(config.get("workflow", {}).get("run_variant_calling", False))
 run_phasing = bool(config.get("workflow", {}).get("run_phasing", False)) and run_variants
@@ -141,8 +176,16 @@ final_targets += expand("results/input/{unit}/{unit}.combined.fastq.gz", unit=UN
 final_targets += expand("results/qc/raw/{unit}/NanoStats.txt", unit=UNIT_IDS)
 final_targets += expand("results/mapping/amplicons/{unit}/{unit}.sorted.bam.bai", unit=UNIT_IDS)
 final_targets += expand("results/mapping/amplicons/{unit}/{unit}.coverage.txt", unit=UNIT_IDS)
+final_targets += expand("results/qc/alignment/{unit}/{unit}.alignment_qc.tsv", unit=UNIT_IDS)
+final_targets += expand("results/qc/alignment/{unit}/{unit}.length_mapq.tsv", unit=UNIT_IDS)
+final_targets += expand("results/mapping/amplicons/{unit}/{unit}.variant.bam.bai", unit=UNIT_IDS)
+final_targets += expand("results/mapping/amplicons/{unit}/{unit}.phasing.bam.bai", unit=UNIT_IDS)
+final_targets += expand("results/mapping/amplicons/{unit}/{unit}.core_intervals.tsv", unit=UNIT_IDS)
 final_targets += expand("results/mapping/genes/{analysis}/{analysis}.merged.bam.bai", analysis=ANALYSIS_IDS)
 final_targets += expand("results/mapping/genes/{analysis}/{analysis}.coverage.txt", analysis=ANALYSIS_IDS)
+final_targets += expand("results/mapping/genes/{analysis}/{analysis}.variant.bam.bai", analysis=ANALYSIS_IDS)
+final_targets += expand("results/mapping/genes/{analysis}/{analysis}.variant.coverage.txt", analysis=ANALYSIS_IDS)
+final_targets += expand("results/mapping/genes/{analysis}/{analysis}.phasing.bam.bai", analysis=ANALYSIS_IDS)
 final_targets += [
     "results/summary/amplicon_summary.tsv",
     "results/summary/gene_summary.tsv",

@@ -2,8 +2,8 @@ rule phase_variants:
     input:
         vcf="results/variants/{analysis}/{analysis}.norm.vcf.gz",
         tbi="results/variants/{analysis}/{analysis}.norm.vcf.gz.tbi",
-        bam="results/mapping/genes/{analysis}/{analysis}.merged.bam",
-        bai="results/mapping/genes/{analysis}/{analysis}.merged.bam.bai",
+        bam="results/mapping/genes/{analysis}/{analysis}.phasing.bam",
+        bai="results/mapping/genes/{analysis}/{analysis}.phasing.bam.bai",
         ref="results/reference/{analysis}/reference.fasta"
     output:
         vcf="results/phasing/{analysis}/{analysis}.phased.vcf.gz",

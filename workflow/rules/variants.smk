@@ -1,7 +1,7 @@
 rule clair3_call:
     input:
-        bam="results/mapping/genes/{analysis}/{analysis}.merged.bam",
-        bai="results/mapping/genes/{analysis}/{analysis}.merged.bam.bai",
+        bam="results/mapping/genes/{analysis}/{analysis}.variant.bam",
+        bai="results/mapping/genes/{analysis}/{analysis}.variant.bam.bai",
         ref="results/reference/{analysis}/reference.fasta",
         fai="results/reference/{analysis}/reference.fasta.fai"
     output:

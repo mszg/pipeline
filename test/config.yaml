@@ -12,6 +12,11 @@ filtering:
 mapping:
   preset: "map-ont"
   threads: 2
+  variant_min_mapq: 0
+  phasing_min_mapq: 0
+  phasing_min_length: 1
+qc:
+  core_depth_threshold: 1
 clair3:
   threads: 2
   platform: "ont"
