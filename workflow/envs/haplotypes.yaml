@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - whatshap
+  - samtools
+  - bcftools
+  - htslib
+  - python

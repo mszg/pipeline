@@ -1,6 +1,6 @@
-# Long-range ONT Snakemake pipeline — v0.5
+# Long-range ONT Snakemake pipeline — v0.6
 
-This workflow is for targeted Oxford Nanopore long-range amplicon sequencing. It is being validated on a real ABO dataset consisting of one patient, one gene, three overlapping long-range PCR amplicons, and multiple FASTQ chunks per amplicon. The workflow itself is not ABO-specific.
+This workflow is for targeted Oxford Nanopore long-range amplicon sequencing. It is being validated on a real ABO dataset consisting of one patient, one gene, three overlapping long-range PCR amplicons, and multiple FASTQ chunks per amplicon. The workflow itself is not ABO-specific and is intended to remain usable for other targeted long-range sequencing applications.
 
 ## Current workflow
 
@@ -22,7 +22,6 @@ VARIANT BAM                  PHASING BAM
 primary + mapped            primary + mapped
 MAPQ >= threshold           MAPQ >= threshold
 no length cutoff            long-read enriched
-full alignments retained    full alignments retained
      |                           |
      v                           |
 primer-defined target BED       |
@@ -40,84 +39,103 @@ complete normalized VCF         |
 biallelic phasing-ready VCF ----+
      |
      v
-  WhatsHap
+  WhatsHap phase
      |
      +-- phased VCF
-     +-- automated phasing QC
+     +-- phasing QC
+     |
+     v
+  WhatsHap haplotag
+     |
+     +-- HP1 BAM / HP2 BAM
+     +-- haplotag QC
+     +-- haplotype coverage QC
+     |
+     v
+haplotype-specific exact allele support
+     |
+     +-- variant_support.tsv
+     +-- uncertain_variants.tsv
+     +-- consensus-ready phased VCF
+     |
+     v
+reference-guided HP1 / HP2 consensus
+(unsequenced, low-depth and unresolved regions masked with N)
 ```
 
-Haplotype consensus/reconstruction is still disabled by default in v0.5 while handling of unphased, multiallelic, and low-confidence variants is validated.
+## v0.6 — haplotagging and conservative haplotype reconstruction
 
-## v0.5 — validated phasing architecture
+v0.6 adds a validated reconstruction stage after v0.5 phasing. WhatsHap `haplotag` assigns phase-informative reads to HP1 or HP2 using the phased biallelic VCF. The workflow then measures target coverage separately for the two haplotypes and evaluates every biallelic candidate using exact REF/ALT support in the HP1 and HP2 read sets.
 
-v0.5 changes the boundary between variant normalization and phasing.
+The consensus stage does **not** use a hard global QUAL cutoff. During real-data validation, low-QUAL heterozygous SNVs could show reproducible haplotype-specific support, while several nominal homozygous-alt indels showed conflicting repeat-associated evidence. Instead, v0.6 uses configurable support criteria and classifies variants as `ACCEPT` or `UNRESOLVED`.
 
-The complete normalized VCF now **preserves multiallelic records**. A second VCF containing only records with exactly one ALT allele is generated specifically for WhatsHap. This avoids converting a multiallelic `1/2` genotype into duplicate biallelic records at the same coordinate.
+Current validation-derived defaults are:
 
-During P001 ABO validation, Clair3 produced a multiallelic repeat-associated call at `NG_006669.2:9109`:
+```yaml
+haplotypes:
+  callable_min_depth: 50
+  min_support_depth: 20
+  min_het_alt_fraction: 0.30
+  min_het_delta: 0.25
+  min_hom_alt_fraction: 0.80
+  max_other_fraction: 0.25
+  require_pass: true
+  mpileup_max_depth: 100000
+```
+
+These are conservative workflow defaults, not universal biological constants. They are exposed in `config/config.yaml` so that future datasets can be revalidated without changing code.
+
+### Heterozygous variants
+
+For a phased `0|1` or `1|0` call, the ALT allele must be enriched on the haplotype predicted by the phased genotype. The expected ALT haplotype must have an exact ALT fraction of at least `min_het_alt_fraction`, and the difference from the opposite haplotype must be at least `min_het_delta`.
+
+### Homozygous-alt variants
+
+A `1/1` call is accepted only when both HP1 and HP2 independently show strong exact ALT support. This protects the consensus from repeat-associated indels that Clair3 may genotype as homozygous-alt despite substantial competing alignments.
+
+### Multiallelic and unsupported complex sites
+
+Multiallelic records remain in the complete normalized catalogue but are not forced into the consensus in v0.6. Unsupported complex alleles, non-PASS variants, unphased heterozygotes, and variants with conflicting haplotype-specific support are written to `uncertain_variants.tsv` and masked in the reconstructed sequence.
+
+## P001 ABO v0.6 validation
+
+For `P001__ABO`, WhatsHap haplotagging assigned 37,126 of 42,373 phasing reads (87.6%):
 
 ```text
-REF=CATATATATATATAT
-ALT=C,CAT
-GT=1/2
-QUAL=7.26
+HP1          18,412
+HP2          18,714
+unassigned    5,247
 ```
 
-Splitting this record caused WhatsHap to warn about a duplicate position and skip one representation. Preserving the site in the full catalogue and excluding multiallelic records from the routine phasing input produced a clean biallelic phasing set.
+Among assigned reads the balance was 49.6% HP1 versus 50.4% HP2. All 37,126 assigned reads carried the validated phase-set ID `PS=9033`.
 
-For P001 ABO, the validated result was:
-
-- 67 target-restricted normalized variant records/sites;
-- 66 biallelic records suitable for routine WhatsHap phasing;
-- 1 preserved multiallelic record;
-- 52 usable heterozygous biallelic variants;
-- 52/52 heterozygous variants phased (100%);
-- one phase set (`PS=9033`);
-- one phase block spanning positions 9033-29201;
-- 37,820 reads covering the phased variants;
-- 37,199 reads covering at least two variants;
-- 38 phase-informative reads selected by WhatsHap.
-
-The detailed validation record is stored in `docs/validation/P001_ABO_v0.5.md`.
-
-## v0.4 — target-aware Clair3 calling
-
-v0.4 made the primer-defined amplicon coordinates explicit variant-calling intervals. Cleaned BAMs remain alignment-quality filters rather than coordinate-clipped BAMs, preserving alignment context while preventing Clair3 from calling outside the intended PCR targets.
-
-Primer mapping to `NG_006669.2` for the ABO validation dataset gave:
+Across the complete primer-defined target union `NG_006669.2:4228-32388` (28,161 bp), haplotype-specific coverage was complete:
 
 ```text
-fragment1  NG_006669.2:4228-18285   14,058 bp
-fragment2  NG_006669.2:11479-24671  13,193 bp
-fragment3  NG_006669.2:19001-32388  13,388 bp
+HP1 mean depth   7,715.68x   minimum 71x
+HP2 mean depth   7,727.58x   minimum 527x
 ```
 
-The three target intervals merge to:
+Both haplotypes therefore had 100% target callability at the v0.6 validation threshold of 50x.
+
+Four candidates were retained as unresolved rather than forced into the consensus:
 
 ```text
-NG_006669.2  4227  32388
+9109   multiallelic 1/2 repeat-associated indel
+13629  CA>C         1/1 with conflicting exact allele support
+13963  CT>C         1/1, LowQual, conflicting repeat-associated support
+25292  G>GACATACAC  1/1 with poor exact ALT support and many competing indels
 ```
 
-in BED format (0-based start, half-open end). Coordinates in `config/samples.tsv` remain 1-based inclusive.
-
-Clair3 receives the merged BED through `--bed_fn`. The resulting VCF is defensively restricted to the same target with `bcftools view -T` after normalization.
+The detailed validation evidence is recorded in `docs/validation/P001_ABO_v0.6.md`.
 
 ## Input handling
 
-`fastq_input` may be either a directory or a single FASTQ file. Directories are searched recursively for:
-
-```text
-*.fastq
-*.fastq.gz
-*.fq
-*.fq.gz
-```
-
-Compressed and uncompressed FASTQs can be mixed. All chunks belonging to one amplicon are streamed into a single staged `.fastq.gz`; the originals are never modified.
+`fastq_input` may be either a directory or a single FASTQ file. Directories are searched recursively for `*.fastq`, `*.fastq.gz`, `*.fq`, and `*.fq.gz`. All chunks belonging to one amplicon are streamed into a single staged `.fastq.gz`; the originals are never modified.
 
 ## Current ABO configuration
 
-The primer-derived target coordinates are stored in `config/samples.tsv`:
+Primer-derived target coordinates are stored in `config/samples.tsv`:
 
 ```text
 sample  gene  amplicon   target_region                  phasing_min_length  core_depth_threshold
@@ -126,97 +144,31 @@ P001    ABO   fragment2  NG_006669.2:11479-24671       8000                50
 P001    ABO   fragment3  NG_006669.2:19001-32388       8000                20
 ```
 
-The full file also contains each FASTQ input and reference path.
+The three overlapping products merge to the BED interval `NG_006669.2 4227 32388`.
 
-## Mapping filters
-
-Defaults are in `config/config.yaml`:
-
-```yaml
-mapping:
-  preset: "map-ont"
-  threads: 8
-  variant_min_mapq: 30
-  phasing_min_mapq: 30
-  phasing_min_length: 8000
-```
-
-### Variant BAM
-
-The variant BAM excludes unmapped, secondary, supplementary, and low-MAPQ alignments. It deliberately does not apply a read-length cutoff because shorter reads can still provide useful local SNP/indel evidence. Alignments are not clipped to the target coordinates.
-
-### Phasing BAM
-
-The phasing BAM uses the same alignment cleanup and additionally applies a configurable minimum read length to enrich for reads carrying long-range linkage information.
-
-## Variant calling and phasing
-
-The current validated configuration uses:
-
-```yaml
-workflow:
-  run_variant_calling: true
-  run_phasing: true
-  run_consensus: false
-
-clair3:
-  platform: "ont"
-  model_name: "r1041_e82_400bps_hac_v520"
-```
-
-Clair3 consumes the gene-level variant BAM and the primer-derived target BED. v0.5 then produces two normalized variant outputs:
+## Important v0.6 outputs
 
 ```text
 results/variants/<analysis>/<analysis>.norm.vcf.gz
 results/variants/<analysis>/<analysis>.phasing_ready.vcf.gz
-```
-
-The first is the complete target-restricted normalized catalogue and preserves multiallelic sites. The second contains exactly biallelic records (`bcftools view -m2 -M2`) and is the input to WhatsHap.
-
-WhatsHap uses:
-
-```text
-results/variants/<analysis>/<analysis>.phasing_ready.vcf.gz
-results/mapping/genes/<analysis>/<analysis>.phasing.bam
-results/reference/<analysis>/reference.fasta
-```
-
-and produces:
-
-```text
 results/phasing/<analysis>/<analysis>.phased.vcf.gz
-results/qc/phasing/<analysis>/<analysis>.phasing_qc.tsv
+
+results/haplotypes/<analysis>/<analysis>.haplotagged.bam
+results/haplotypes/<analysis>/<analysis>.HP1.bam
+results/haplotypes/<analysis>/<analysis>.HP2.bam
+
+results/qc/haplotypes/<analysis>/<analysis>.haplotag_qc.tsv
+results/qc/haplotypes/<analysis>/<analysis>.coverage_qc.tsv
+results/qc/haplotypes/<analysis>/<analysis>.variant_support.tsv
+results/qc/haplotypes/<analysis>/<analysis>.uncertain_variants.tsv
+results/qc/haplotypes/<analysis>/<analysis>.uncertain_regions.bed
+
+results/variants/<analysis>/<analysis>.consensus_ready.vcf.gz
+results/consensus/<analysis>/<analysis>.haplotype1.fasta
+results/consensus/<analysis>/<analysis>.haplotype2.fasta
 ```
 
-The QC table reports variant counts, phased fraction, number of phase sets, and the size and genomic span of the largest phase block.
-
-## Important output files
-
-```text
-results/summary/input_manifest.tsv
-results/summary/amplicon_summary.tsv
-results/summary/gene_summary.tsv
-
-results/targets/<analysis>/<analysis>.bed
-results/targets/<analysis>/<analysis>.target_regions.tsv
-
-results/qc/raw/<unit>/NanoStats.txt
-results/qc/alignment/<unit>/<unit>.alignment_qc.tsv
-results/qc/alignment/<unit>/<unit>.length_mapq.tsv
-results/qc/phasing/<analysis>/<analysis>.phasing_qc.tsv
-
-results/mapping/amplicons/<unit>/<unit>.sorted.bam
-results/mapping/amplicons/<unit>/<unit>.variant.bam
-results/mapping/amplicons/<unit>/<unit>.phasing.bam
-
-results/mapping/genes/<analysis>/<analysis>.merged.bam
-results/mapping/genes/<analysis>/<analysis>.variant.bam
-results/mapping/genes/<analysis>/<analysis>.phasing.bam
-
-results/variants/<analysis>/<analysis>.norm.vcf.gz
-results/variants/<analysis>/<analysis>.phasing_ready.vcf.gz
-results/phasing/<analysis>/<analysis>.phased.vcf.gz
-```
+The consensus FASTAs are reference-guided haplotype consensuses, not de novo assemblies. Sequence outside the primer-defined target, positions below the haplotype-specific callable-depth threshold, and unresolved variant spans are masked with `N`. For an unresolved insertion, the reference anchor is masked and the complete ambiguity remains documented in `uncertain_variants.tsv`.
 
 ## Running the workflow
 
@@ -225,26 +177,18 @@ From the repository root:
 ```bash
 conda activate bloodgroup
 snakemake -n -p
-```
-
-Then execute:
-
-```bash
 snakemake --cores 8 --software-deployment-method conda -p
 ```
 
-To inspect the phasing QC result:
+Useful QC views:
 
 ```bash
 column -t -s $'\t' results/qc/phasing/P001__ABO/P001__ABO.phasing_qc.tsv
+column -t -s $'\t' results/qc/haplotypes/P001__ABO/P001__ABO.haplotag_qc.tsv
+column -t -s $'\t' results/qc/haplotypes/P001__ABO/P001__ABO.coverage_qc.tsv
+column -t -s $'\t' results/qc/haplotypes/P001__ABO/P001__ABO.variant_support.tsv | less -S
 ```
 
 ## Reference
 
-The current ABO validation uses RefSeqGene `NG_006669.2` stored as:
-
-```text
-resources/references/ABO_reference.fasta
-```
-
-Other genes and amplicons can be added as additional rows in `config/samples.tsv`.
+The current ABO validation uses RefSeqGene `NG_006669.2` stored as `resources/references/ABO_reference.fasta`. Coordinates reported by this validation are RefSeqGene coordinates, not GRCh38 coordinates. Other genes and amplicons can be added as additional rows in `config/samples.tsv`.

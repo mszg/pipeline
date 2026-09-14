@@ -161,7 +161,8 @@ def core_depth_threshold_for_unit(wc):
 use_filtered = bool(config.get("filtering", {}).get("enabled", False))
 run_variants = bool(config.get("workflow", {}).get("run_variant_calling", False))
 run_phasing = bool(config.get("workflow", {}).get("run_phasing", False)) and run_variants
-run_consensus = bool(config.get("workflow", {}).get("run_consensus", False)) and run_phasing
+run_haplotypes = bool(config.get("workflow", {}).get("run_haplotype_reconstruction", False)) and run_phasing
+run_consensus = bool(config.get("workflow", {}).get("run_consensus", False)) and run_haplotypes
 require_target_regions = bool(config.get("clair3", {}).get("require_target_regions", True))
 
 
@@ -199,6 +200,7 @@ include: "workflow/rules/mapping.smk"
 include: "workflow/rules/targets.smk"
 include: "workflow/rules/variants.smk"
 include: "workflow/rules/phasing.smk"
+include: "workflow/rules/haplotypes.smk"
 include: "workflow/rules/consensus.smk"
 include: "workflow/rules/report.smk"
 
@@ -230,6 +232,15 @@ if run_phasing:
     final_targets += expand("results/variants/{analysis}/{analysis}.phasing_ready.vcf.gz.tbi", analysis=ANALYSIS_IDS)
     final_targets += expand("results/phasing/{analysis}/{analysis}.phased.vcf.gz.tbi", analysis=ANALYSIS_IDS)
     final_targets += expand("results/qc/phasing/{analysis}/{analysis}.phasing_qc.tsv", analysis=ANALYSIS_IDS)
+if run_haplotypes:
+    final_targets += expand("results/haplotypes/{analysis}/{analysis}.haplotagged.bam.bai", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/haplotypes/{analysis}/{analysis}.HP1.bam.bai", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/haplotypes/{analysis}/{analysis}.HP2.bam.bai", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/qc/haplotypes/{analysis}/{analysis}.haplotag_qc.tsv", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/qc/haplotypes/{analysis}/{analysis}.coverage_qc.tsv", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/qc/haplotypes/{analysis}/{analysis}.variant_support.tsv", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/qc/haplotypes/{analysis}/{analysis}.uncertain_variants.tsv", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/variants/{analysis}/{analysis}.consensus_ready.vcf.gz.tbi", analysis=ANALYSIS_IDS)
 if run_consensus:
     final_targets += expand("results/consensus/{analysis}/{analysis}.haplotype1.fasta", analysis=ANALYSIS_IDS)
     final_targets += expand("results/consensus/{analysis}/{analysis}.haplotype2.fasta", analysis=ANALYSIS_IDS)
