@@ -55,7 +55,29 @@ rule normalize_variants:
         "../envs/variants.yaml"
     shell:
         r"""
-        bcftools norm -f {input.ref:q} -m -any {input.vcf:q} -Ou \
+        # Preserve multiallelic records in the complete normalized catalogue.
+        # Splitting a 1/2 site into duplicate biallelic positions can make one
+        # record invisible to WhatsHap, as observed during ABO validation.
+        bcftools norm -f {input.ref:q} {input.vcf:q} -Ou \
           | bcftools view {params.target_arg} -Oz -o {output.vcf:q}
+        tabix -f -p vcf {output.vcf:q}
+        """
+
+
+rule make_phasing_ready_variants:
+    input:
+        vcf="results/variants/{analysis}/{analysis}.norm.vcf.gz",
+        tbi="results/variants/{analysis}/{analysis}.norm.vcf.gz.tbi"
+    output:
+        vcf="results/variants/{analysis}/{analysis}.phasing_ready.vcf.gz",
+        tbi="results/variants/{analysis}/{analysis}.phasing_ready.vcf.gz.tbi"
+    conda:
+        "../envs/variants.yaml"
+    shell:
+        r"""
+        # WhatsHap receives only records with exactly one ALT allele.
+        # The complete normalized VCF remains available for reporting so that
+        # multiallelic candidates are preserved rather than silently lost.
+        bcftools view -m2 -M2 -Oz -o {output.vcf:q} {input.vcf:q}
         tabix -f -p vcf {output.vcf:q}
         """
