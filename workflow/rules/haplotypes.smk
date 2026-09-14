@@ -4,7 +4,8 @@ rule haplotag_reads:
         tbi="results/phasing/{analysis}/{analysis}.phased.vcf.gz.tbi",
         bam="results/mapping/genes/{analysis}/{analysis}.phasing.bam",
         bai="results/mapping/genes/{analysis}/{analysis}.phasing.bam.bai",
-        ref="results/reference/{analysis}/reference.fasta"
+        ref="results/reference/{analysis}/reference.fasta",
+        fai="results/reference/{analysis}/reference.fasta.fai"
     output:
         bam="results/haplotypes/{analysis}/{analysis}.haplotagged.bam",
         bai="results/haplotypes/{analysis}/{analysis}.haplotagged.bam.bai"
@@ -89,7 +90,8 @@ rule haplotype_variant_support:
         hp1_bai="results/haplotypes/{analysis}/{analysis}.HP1.bam.bai",
         hp2_bam="results/haplotypes/{analysis}/{analysis}.HP2.bam",
         hp2_bai="results/haplotypes/{analysis}/{analysis}.HP2.bam.bai",
-        ref="results/reference/{analysis}/reference.fasta"
+        ref="results/reference/{analysis}/reference.fasta",
+        fai="results/reference/{analysis}/reference.fasta.fai"
     output:
         support="results/qc/haplotypes/{analysis}/{analysis}.variant_support.tsv",
         uncertain="results/qc/haplotypes/{analysis}/{analysis}.uncertain_variants.tsv",
