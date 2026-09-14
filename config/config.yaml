@@ -32,15 +32,12 @@ qc:
   core_depth_threshold: 20
 
 clair3:
-  # Safety default for a targeted amplicon workflow: every amplicon must have
-  # target_region defined before variant calling can be enabled.
+  # Safety default for targeted amplicon workflows.
   require_target_regions: true
-  clair3:
   threads: 8
   platform: "ont"
   model_name: "r1041_e82_400bps_hac_v520"
   executable: "run_clair3.sh"
-  require_target_regions: true
   extra: "--var_pct_full=1 --ref_pct_full=1 --var_pct_phasing=1 --enable_variant_calling_at_sequence_head_and_tail"
 
 phasing:
