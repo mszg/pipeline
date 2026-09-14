@@ -227,7 +227,9 @@ final_targets += [
 if run_variants:
     final_targets += expand("results/variants/{analysis}/{analysis}.norm.vcf.gz.tbi", analysis=ANALYSIS_IDS)
 if run_phasing:
+    final_targets += expand("results/variants/{analysis}/{analysis}.phasing_ready.vcf.gz.tbi", analysis=ANALYSIS_IDS)
     final_targets += expand("results/phasing/{analysis}/{analysis}.phased.vcf.gz.tbi", analysis=ANALYSIS_IDS)
+    final_targets += expand("results/qc/phasing/{analysis}/{analysis}.phasing_qc.tsv", analysis=ANALYSIS_IDS)
 if run_consensus:
     final_targets += expand("results/consensus/{analysis}/{analysis}.haplotype1.fasta", analysis=ANALYSIS_IDS)
     final_targets += expand("results/consensus/{analysis}/{analysis}.haplotype2.fasta", analysis=ANALYSIS_IDS)
