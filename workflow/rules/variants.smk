@@ -28,6 +28,7 @@ rule clair3_call:
           --bam_fn={input.bam:q} \
           --ref_fn={input.ref:q} \
           --threads={threads} \
+          --platform={params.platform:q} \
           --model_path="$(dirname "$(command -v run_clair3.sh)")/models/{params.model_name}" \
           --output={params.outdir:q} \
           --sample_name={wildcards.analysis:q} \
