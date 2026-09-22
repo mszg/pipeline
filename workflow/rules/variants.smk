@@ -17,6 +17,7 @@ rule clair3_call:
     params:
         executable=lambda wc: config["clair3"]["executable"],
         model_name=lambda wc: config["clair3"]["model_name"],
+        model_path=lambda wc: config["clair3"].get("model_path", ""),
         platform=lambda wc: config["clair3"]["platform"],
         extra=lambda wc: config["clair3"].get("extra", ""),
         bed_arg=clair3_bed_arg,
@@ -24,12 +25,17 @@ rule clair3_call:
     shell:
         r"""
         mkdir -p {params.outdir:q} results/logs/variants
-        {params.executable} \
+        model_path={params.model_path:q}
+        if [ -z "$model_path" ]; then
+            model_path="$(dirname "$(command -v {params.executable:q})")/models/{params.model_name}"
+        fi
+        test -d "$model_path"
+        {params.executable:q} \
           --bam_fn={input.bam:q} \
           --ref_fn={input.ref:q} \
           --threads={threads} \
           --platform={params.platform:q} \
-          --model_path="$(dirname "$(command -v run_clair3.sh)")/models/{params.model_name}" \
+          --model_path="$model_path" \
           --output={params.outdir:q} \
           --sample_name={wildcards.analysis:q} \
           {params.bed_arg} \

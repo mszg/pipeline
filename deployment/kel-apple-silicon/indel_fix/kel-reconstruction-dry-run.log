@@ -1,0 +1,198 @@
+Config file config/config.yaml is extended by additional config specified via the command line.
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-09-21 19:40:41
+  Workflow ID: f1e45127-b308-4264-ad90-16ff3a17182a
+  Platform: macOS-26.6.2-arm64-arm-64bit
+  Host: MacBook-Air-von-Gergo.local
+  User: mszg
+  Snakemake version: 9.27.0
+  Python version: 3.12.14 (main, Sep  3 2026, 03:46:19) [Clang 21.1.8 ]
+  Command: <WORKSPACE>/setup/envs/kel-native/bin/snakemake --cores 2 --scheduler greedy --rerun-incomplete all --configfile config/kel.yaml config/kel.calling.yaml config/kel.reconstruction.yaml --dry-run --printshellcmds
+  Snakefile: <WORKSPACE>/workflow/Snakefile
+  Base directory: <WORKSPACE>/workflow
+  Run directory: <WORKSPACE>/workflow
+  Working directory: <WORKSPACE>/workflow
+  Config file(s): [PosixPath('<WORKSPACE>/workflow/config/kel.yaml'), PosixPath('<WORKSPACE>/workflow/config/kel.calling.yaml'), PosixPath('<WORKSPACE>/workflow/config/kel.reconstruction.yaml'), 'config/config.yaml']
+  Config MD5: 99527d100efb04fe3039ffe40cfea2af
+
+Building DAG of jobs...
+Job stats:
+job                              count
+-----------------------------  -------
+validate_haplotype_phase_sets        1
+haplotag_reads                       1
+haplotag_qc                          1
+split_haplotagged_reads              1
+haplotype_coverage_qc                1
+haplotype_variant_support            1
+consensus_mask_hp1                   1
+consensus_mask_hp2                   1
+consensus_haplotype1                 1
+consensus_haplotype2                 1
+all                                  1
+total                               11
+
+
+[Mon Sep 21 19:40:43 2026]
+rule validate_haplotype_phase_sets:
+    input: results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi, results/targets/KEL__KEL/KEL__KEL.bed
+    output: results/qc/haplotypes/KEL__KEL/KEL__KEL.phase_set_validation.tsv
+    jobid: 53
+    reason: Missing output files: results/qc/haplotypes/KEL__KEL/KEL__KEL.phase_set_validation.tsv
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 19:40:43 2026]
+rule haplotag_reads:
+    input: results/qc/haplotypes/KEL__KEL/KEL__KEL.phase_set_validation.tsv, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai, results/reference/KEL__KEL/reference.fasta, results/reference/KEL__KEL/reference.fasta.fai
+    output: results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai
+    log: results/logs/haplotypes/KEL__KEL.haplotag.log
+    jobid: 52
+    reason: Missing output files: results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai; Input files updated by another job: results/qc/haplotypes/KEL__KEL/KEL__KEL.phase_set_validation.tsv
+    wildcards: analysis=KEL__KEL
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/haplotypes/KEL__KEL results/logs/haplotypes
+        whatshap haplotag \
+          --reference results/reference/KEL__KEL/reference.fasta \
+          --output results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam \
+          results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam \
+          > results/logs/haplotypes/KEL__KEL.haplotag.log 2>&1
+        samtools index -@ 2 results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam
+
+
+[Mon Sep 21 19:40:43 2026]
+rule split_haplotagged_reads:
+    input: results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai
+    output: results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai
+    jobid: 54
+    reason: Missing output files: results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai; Input files updated by another job: results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai
+    wildcards: analysis=KEL__KEL
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        samtools view -@ 2 -b -d HP:1 results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam -o results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam
+        samtools view -@ 2 -b -d HP:2 results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam -o results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam
+        samtools index -@ 2 results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam
+        samtools index -@ 2 results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam
+
+
+[Mon Sep 21 19:40:43 2026]
+rule haplotag_qc:
+    input: results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai
+    output: results/qc/haplotypes/KEL__KEL/KEL__KEL.haplotag_qc.tsv
+    jobid: 55
+    reason: Missing output files: results/qc/haplotypes/KEL__KEL/KEL__KEL.haplotag_qc.tsv; Input files updated by another job: results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 19:40:43 2026]
+rule haplotype_variant_support:
+    input: <WORKSPACE>/workflow/workflow/scripts/allele_support.py, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai, results/reference/KEL__KEL/reference.fasta, results/reference/KEL__KEL/reference.fasta.fai
+    output: results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_variants.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.accepted_variants.bed, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi
+    jobid: 57
+    reason: Missing output files: results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_variants.tsv, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed; Input files updated by another job: results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 19:40:43 2026]
+rule haplotype_coverage_qc:
+    input: results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai, results/targets/KEL__KEL/KEL__KEL.bed
+    output: results/qc/haplotypes/KEL__KEL/KEL__KEL.coverage_qc.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP1.low_depth.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP2.low_depth.bed
+    jobid: 56
+    reason: Missing output files: results/qc/haplotypes/KEL__KEL/KEL__KEL.HP2.low_depth.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.coverage_qc.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP1.low_depth.bed; Input files updated by another job: results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 19:40:43 2026]
+rule consensus_mask_hp2:
+    input: results/reference/KEL__KEL/reference.fasta.fai, results/targets/KEL__KEL/KEL__KEL.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP2.low_depth.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed
+    jobid: 61
+    reason: Missing output files: results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed; Input files updated by another job: results/qc/haplotypes/KEL__KEL/KEL__KEL.HP2.low_depth.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 19:40:43 2026]
+rule consensus_mask_hp1:
+    input: results/reference/KEL__KEL/reference.fasta.fai, results/targets/KEL__KEL/KEL__KEL.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP1.low_depth.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed
+    jobid: 59
+    reason: Missing output files: results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed; Input files updated by another job: results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP1.low_depth.bed
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 19:40:43 2026]
+rule consensus_haplotype1:
+    input: results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/reference/KEL__KEL/reference.fasta, results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta
+    jobid: 58
+    reason: Missing output files: results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta; Input files updated by another job: results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/consensus/KEL__KEL
+        if [ -s results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed ]; then
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 1 -m results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta
+        else
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 1 results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta
+        fi
+
+
+[Mon Sep 21 19:40:43 2026]
+rule consensus_haplotype2:
+    input: results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/reference/KEL__KEL/reference.fasta, results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+    jobid: 60
+    reason: Missing output files: results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta; Input files updated by another job: results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/consensus/KEL__KEL
+        if [ -s results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed ]; then
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 2 -m results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+        else
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 2 results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+        fi
+
+
+[Mon Sep 21 19:40:43 2026]
+rule all:
+    input: results/summary/input_manifest.tsv, results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz, results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz, results/qc/raw/KEL__KEL__fragment1/NanoStats.txt, results/qc/raw/KEL__KEL__fragment2/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.length_mapq.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.length_mapq.tsv, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv, results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai, results/targets/KEL__KEL/KEL__KEL.bed, results/targets/KEL__KEL/KEL__KEL.target_regions.tsv, results/summary/amplicon_summary.tsv, results/summary/gene_summary.tsv, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi, results/qc/phasing/KEL__KEL/KEL__KEL.phasing_qc.tsv, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai, results/qc/haplotypes/KEL__KEL/KEL__KEL.haplotag_qc.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.coverage_qc.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_variants.tsv, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta, results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+    jobid: 0
+    reason: Input files updated by another job: results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta, results/qc/haplotypes/KEL__KEL/KEL__KEL.coverage_qc.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_variants.tsv, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta, results/qc/haplotypes/KEL__KEL/KEL__KEL.haplotag_qc.tsv, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+Job stats:
+job                              count
+-----------------------------  -------
+validate_haplotype_phase_sets        1
+haplotag_reads                       1
+haplotag_qc                          1
+split_haplotagged_reads              1
+haplotype_coverage_qc                1
+haplotype_variant_support            1
+consensus_mask_hp1                   1
+consensus_mask_hp2                   1
+consensus_haplotype1                 1
+consensus_haplotype2                 1
+all                                  1
+total                               11
+
+Reasons:
+    (check individual jobs above for details)
+    input files updated by another job:
+        all, consensus_haplotype1, consensus_haplotype2, consensus_mask_hp1, consensus_mask_hp2, haplotag_qc, haplotag_reads, haplotype_coverage_qc, haplotype_variant_support, split_haplotagged_reads
+    output files have to be generated:
+        consensus_haplotype1, consensus_haplotype2, consensus_mask_hp1, consensus_mask_hp2, haplotag_qc, haplotag_reads, haplotype_coverage_qc, haplotype_variant_support, split_haplotagged_reads, validate_haplotype_phase_sets
+This was a dry-run (flag -n). The order of jobs does not reflect the order of execution.

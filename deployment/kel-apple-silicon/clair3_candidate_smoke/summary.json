@@ -1,0 +1,163 @@
+{
+  "purpose": "Synthetic candidate/inference smoke only; not biological or clinical validation.",
+  "started_at": "2026-09-21T11:48:14.738825+00:00",
+  "source_bam": "<WORKSPACE>/setup/smoke/run/results/mapping/genes/SYNTHETIC__TEST/SYNTHETIC__TEST.variant.bam",
+  "source_bam_sha256_before": "fdaf4e46c161edd7ce2473ad2e887c3e456df8d7ed164fd4d92fbf5aaa4a94bf",
+  "source_reference": "<WORKSPACE>/setup/smoke/run/results/reference/SYNTHETIC__TEST/reference.fasta",
+  "source_reference_sha256": "c9d3988be03a7781da0a0385e8c2dd4915f41628d7f84fdbbb34699d1a9de6f3",
+  "status": "passed",
+  "covering_read_ids": 48,
+  "alternate_haplotype_read_ids": 24,
+  "edited_read_count": 48,
+  "truth": [
+    {
+      "chrom": "SYNTHETIC_REF",
+      "pos": 11200,
+      "ref": "C",
+      "alt": "T",
+      "expected_genotype": "1/1",
+      "intended_alt_read_ids": 48,
+      "assigned_alt_reads": 48,
+      "edited_reads": 48,
+      "baseline_allele_counts": {
+        "C": 48
+      },
+      "bam_allele_counts": {
+        "T": 48
+      }
+    },
+    {
+      "chrom": "SYNTHETIC_REF",
+      "pos": 11500,
+      "ref": "T",
+      "alt": "C",
+      "expected_genotype": "0/1",
+      "intended_alt_read_ids": 24,
+      "assigned_alt_reads": 24,
+      "edited_reads": 24,
+      "baseline_allele_counts": {
+        "T": 46,
+        "A": 1,
+        "G": 1
+      },
+      "bam_allele_counts": {
+        "C": 24,
+        "T": 24
+      }
+    },
+    {
+      "chrom": "SYNTHETIC_REF",
+      "pos": 11800,
+      "ref": "T",
+      "alt": "C",
+      "expected_genotype": "0/1",
+      "intended_alt_read_ids": 24,
+      "assigned_alt_reads": 24,
+      "edited_reads": 24,
+      "baseline_allele_counts": {
+        "T": 47,
+        "G": 1
+      },
+      "bam_allele_counts": {
+        "C": 24,
+        "T": 24
+      }
+    }
+  ],
+  "candidate_bam_sha256": "1acc7cf66a2376f67e2e04286e1f0f8c515506e1d7e8bac64e831accb3aa6b84",
+  "nm_md_recomputed": "samtools calmd -b",
+  "reference_identical_to_source": true,
+  "command": [
+    "<WORKSPACE>/setup/run_clair3.sh",
+    "--bam_fn=<WORKSPACE>/setup/clair3_candidate_smoke/candidates.bam",
+    "--ref_fn=<WORKSPACE>/setup/clair3_candidate_smoke/reference.fasta",
+    "--bed_fn=<WORKSPACE>/setup/clair3_candidate_smoke/targets.bed",
+    "--threads=2",
+    "--platform=ont",
+    "--model_path=<WORKSPACE>/setup/envs/clair3-arm64/bin/models/r1041_e82_400bps_hac_v520",
+    "--output=<WORKSPACE>/setup/clair3_candidate_smoke/output",
+    "--sample_name=SYNTHETIC__TEST",
+    "--var_pct_full=1",
+    "--ref_pct_full=1",
+    "--var_pct_phasing=1",
+    "--enable_variant_calling_at_sequence_head_and_tail"
+  ],
+  "exit_code": 0,
+  "elapsed_calling_seconds": 13.854,
+  "source_bam_sha256_after": "fdaf4e46c161edd7ce2473ad2e887c3e456df8d7ed164fd4d92fbf5aaa4a94bf",
+  "original_bam_unchanged": true,
+  "stage_messages": [
+    "[INFO] 1/7 Call variants using pileup model",
+    "[INFO] 2/7 Select heterozygous SNP variants for Whatshap phasing and haplotagging",
+    "[INFO] 3/7 Phase VCF file using Whatshap",
+    "[INFO] 5/7 Select candidates for full-alignment calling",
+    "[INFO] 6/7 Call low-quality variants using full-alignment model",
+    "[INFO] 7/7 Merge pileup VCF and full-alignment VCF"
+  ],
+  "processed_position_messages": [
+    "Total processed positions in SYNTHETIC_REF (chunk 1/1) : 3",
+    "Total processed positions in SYNTHETIC_REF (chunk 1/1) : 2"
+  ],
+  "full_alignment_stage_reached": true,
+  "merged_vcf_exists": true,
+  "merged_vcf_tbi_exists": true,
+  "gzip_valid": true,
+  "vcf_chrom_header": "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSYNTHETIC__TEST",
+  "variant_record_count": 3,
+  "variants": [
+    {
+      "chrom": "SYNTHETIC_REF",
+      "pos": 11200,
+      "ref": "C",
+      "alt": "T",
+      "qual": "30.84",
+      "filter": "PASS",
+      "format": "GT:GQ:DP:AD:AF",
+      "sample": "1/1:30:48:0,48:1.0000"
+    },
+    {
+      "chrom": "SYNTHETIC_REF",
+      "pos": 11500,
+      "ref": "T",
+      "alt": "C",
+      "qual": "64.61",
+      "filter": "PASS",
+      "format": "GT:GQ:DP:AD:AF",
+      "sample": "0/1:64:48:24,24:0.5000"
+    },
+    {
+      "chrom": "SYNTHETIC_REF",
+      "pos": 11800,
+      "ref": "T",
+      "alt": "C",
+      "qual": "55.26",
+      "filter": "PASS",
+      "format": "GT:GQ:DP:AD:AF",
+      "sample": "0/1:55:48:24,24:0.5000"
+    }
+  ],
+  "synthetic_truth_comparison": [
+    {
+      "pos": 11200,
+      "expected_genotype": "1/1",
+      "exact_allele_found": true,
+      "genotype_matches": true
+    },
+    {
+      "pos": 11500,
+      "expected_genotype": "0/1",
+      "exact_allele_found": true,
+      "genotype_matches": true
+    },
+    {
+      "pos": 11800,
+      "expected_genotype": "0/1",
+      "exact_allele_found": true,
+      "genotype_matches": true
+    }
+  ],
+  "indexed_query_exit_code": 0,
+  "indexed_query_records": 3,
+  "completed_at": "2026-09-21T11:48:29.209902+00:00",
+  "preserved_cigar_qualities_mapping_verified_reads": 48
+}

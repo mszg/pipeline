@@ -1,0 +1,38 @@
+# One biological sample, confirmed by the user. KEL is only a technical grouping
+# label required by the existing sample table schema, not a patient identifier.
+samples: "config/kel.samples.tsv"
+
+# Mapping/QC configuration. Reference and primer coordinates were confirmed
+# against NCBI. Add kel.calling.yaml for the tested calling/phasing stage;
+# add kel.reconstruction.yaml for repaired reconstruction/consensus. See
+# docs/validation/KEL_indel_revalidation.md and deployment/kel-apple-silicon/.
+workflow:
+  run_variant_calling: false
+  run_phasing: false
+  run_haplotype_reconstruction: false
+  run_consensus: false
+filtering:
+  enabled: false
+mapping:
+  preset: "map-ont"
+  threads: 2
+  variant_min_mapq: 30
+  phasing_min_mapq: 30
+  # Provisional upstream default; review against each KEL amplicon design.
+  phasing_min_length: 8000
+qc:
+  core_depth_threshold: 20
+  # HTML plots and statistics; avoids launching a browser for static export.
+  nanoplot_no_static: true
+clair3:
+  require_target_regions: true
+  threads: 2
+  platform: "ont"
+  # Confirmed from FASTQ headers: dna_r10.4.1_e8.2_400bps_hac@v5.2.0.
+  model_name: "r1041_e82_400bps_hac_v520"
+  executable: "run_clair3.sh"
+  extra: "--var_pct_full=1 --ref_pct_full=1 --var_pct_phasing=1 --enable_variant_calling_at_sequence_head_and_tail"
+phasing:
+  threads: 2
+haplotypes:
+  threads: 2

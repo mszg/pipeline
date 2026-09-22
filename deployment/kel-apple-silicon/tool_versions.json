@@ -1,0 +1,59 @@
+{
+  "machine": "arm64",
+  "packages": 202,
+  "subdirs": [
+    "noarch",
+    "osx-arm64"
+  ],
+  "tools": {
+    "pysam": "0.24.1",
+    "pandas": "3.0.6",
+    "numpy": "2.5.3",
+    "yaml": "6.0.3",
+    "plotly": "6.9.0",
+    "snakemake": {
+      "returncode": 0,
+      "version": [
+        "9.27.0"
+      ]
+    },
+    "minimap2": {
+      "returncode": 0,
+      "version": [
+        "2.31-r1302"
+      ]
+    },
+    "samtools": {
+      "returncode": 0,
+      "version": [
+        "samtools 1.24",
+        "Using htslib 1.24"
+      ]
+    },
+    "bcftools": {
+      "returncode": 0,
+      "version": [
+        "bcftools 1.24",
+        "Using htslib 1.24"
+      ]
+    },
+    "whatshap": {
+      "returncode": 0,
+      "version": [
+        "2.8"
+      ]
+    },
+    "NanoPlot": {
+      "returncode": 0,
+      "version": [
+        "NanoPlot 1.48.0"
+      ]
+    },
+    "filtlong": {
+      "returncode": 0,
+      "version": [
+        "Filtlong v0.3.1"
+      ]
+    }
+  }
+}

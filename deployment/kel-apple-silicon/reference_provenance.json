@@ -1,0 +1,60 @@
+{
+  "accession": "NG_007492.3",
+  "length": 28313,
+  "sha256": "488d6efe397c2fc5da5ecc65f43453cf6bc2e465d1c2e9beb8a55eaa5fc0074c",
+  "retrieved_utc": "2026-09-21T11:35:57.565926+00:00",
+  "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NG_007492.3&rettype=fasta&retmode=text",
+  "primer_checks": [
+    {
+      "name": "fragment1_A",
+      "forward": "TGCTAAGAGGGAGACCACACA",
+      "reverse": "ATAAGGAAGGCCACTGCGTA",
+      "start": 412,
+      "end": 15302,
+      "length": 14891,
+      "forward_match": true,
+      "reverse_match": true
+    },
+    {
+      "name": "fragment1_B",
+      "forward": "TTGCTAAGAGGGAGACCACACA",
+      "reverse": "AGGAAGGCCACTGCGTAACA",
+      "start": 411,
+      "end": 15299,
+      "length": 14889,
+      "forward_match": true,
+      "reverse_match": true
+    },
+    {
+      "name": "fragment2_A",
+      "forward": "TTCCTCAGGTGTGGTGTGAAG",
+      "reverse": "CTCCATTCTTGTGCCTCGCC",
+      "start": 14079,
+      "end": 28023,
+      "length": 13945,
+      "forward_match": true,
+      "reverse_match": true
+    },
+    {
+      "name": "fragment2_B",
+      "forward": "TTCCTCAGGTGTGGTGTGAA",
+      "reverse": "TCCATTCTTGTGCCTCGCC",
+      "start": 14079,
+      "end": 28022,
+      "length": 13944,
+      "forward_match": true,
+      "reverse_match": true
+    }
+  ],
+  "targets": [
+    "NG_007492.3:411-15302",
+    "NG_007492.3:14079-28023"
+  ],
+  "bed_union": [
+    "NG_007492.3",
+    410,
+    28023
+  ],
+  "union_length": 27613,
+  "overlap_length": 1224
+}

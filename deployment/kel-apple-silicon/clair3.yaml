@@ -1,0 +1,11 @@
+# Install separately from the Python 3.12 core/controller environment.
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11
+  - clair3=2.0.3
+  - samtools=1.24
+  - bcftools=1.24
+  - htslib=1.24

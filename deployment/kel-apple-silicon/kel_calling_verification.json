@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "scope": "Indexed VCF parsing, sample/reference/target consistency, catalogue preservation and observed phase connectivity; no external variant truth set",
+  "normalized": {
+    "file": "workflow/results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz",
+    "counts": {
+      "records": 45,
+      "biallelic": 44,
+      "PASS": 45,
+      "heterozygous": 42,
+      "unphased_heterozygous": 42,
+      "multiallelic": 1
+    },
+    "genotypes": {
+      "0/1": 41,
+      "1/1": 3,
+      "1/2": 1
+    },
+    "phase_sets": {}
+  },
+  "phasing_ready": {
+    "file": "workflow/results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz",
+    "counts": {
+      "records": 44,
+      "biallelic": 44,
+      "PASS": 44,
+      "heterozygous": 41,
+      "unphased_heterozygous": 41
+    },
+    "genotypes": {
+      "0/1": 41,
+      "1/1": 3
+    },
+    "phase_sets": {}
+  },
+  "phased": {
+    "file": "workflow/results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz",
+    "counts": {
+      "records": 44,
+      "biallelic": 44,
+      "PASS": 44,
+      "heterozygous": 41,
+      "phased_heterozygous": 41
+    },
+    "genotypes": {
+      "0|1": 38,
+      "1|0": 3,
+      "1/1": 3
+    },
+    "phase_sets": {
+      "516": {
+        "heterozygous_records": 41,
+        "start": 516,
+        "end": 25592
+      }
+    }
+  },
+  "single_observed_phase_set": true,
+  "downstream_validation_record": "setup/indel_fix/kel_reconstruction_verification.json"
+}

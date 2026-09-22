@@ -1,0 +1,615 @@
+Config file config/config.yaml is extended by additional config specified via the command line.
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-09-21 13:36:26
+  Workflow ID: ecb21552-98a0-4cd7-92d9-38bf9bfa9f24
+  Platform: macOS-26.6.2-arm64-arm-64bit
+  Host: MacBook-Air-von-Gergo.local
+  User: mszg
+  Snakemake version: 9.27.0
+  Python version: 3.12.14 (main, Sep  3 2026, 03:46:19) [Clang 21.1.8 ]
+  Command: <WORKSPACE>/setup/envs/kel-native/bin/snakemake --cores 2 --scheduler greedy --rerun-incomplete all --configfile config/kel.yaml --dry-run --printshellcmds
+  Snakefile: <WORKSPACE>/workflow/Snakefile
+  Base directory: <WORKSPACE>/workflow
+  Run directory: <WORKSPACE>/workflow
+  Working directory: <WORKSPACE>/workflow
+  Config file(s): [PosixPath('<WORKSPACE>/workflow/config/kel.yaml'), 'config/config.yaml']
+  Config MD5: 5cf563a8f8e48942b5838635df62d724
+
+Building DAG of jobs...
+Job stats:
+job                          count
+-------------------------  -------
+build_analysis_target_bed        1
+combine_fastq_chunks             2
+input_manifest                   1
+stage_reference                  1
+minimap2_index                   1
+nanoplot_raw                     2
+align_amplicon                   2
+amplicon_alignment_qc            2
+amplicon_coverage                2
+amplicon_flagstat                2
+filter_phasing_bam               2
+filter_variant_bam               2
+index_amplicon_bam               2
+merge_gene_bams                  1
+gene_coverage                    1
+gene_flagstat                    1
+index_gene_bam                   1
+index_phasing_bam                2
+index_variant_bam                2
+merge_gene_phasing_bams          1
+merge_gene_variant_bams          1
+variant_bam_coverage             2
+variant_bam_depth                2
+core_intervals                   2
+gene_phasing_flagstat            1
+gene_variant_coverage            1
+gene_variant_flagstat            1
+index_gene_phasing_bam           1
+index_gene_variant_bam           1
+amplicon_summary                 1
+gene_summary                     1
+all                              1
+total                           46
+
+
+[Mon Sep 21 13:36:29 2026]
+rule stage_reference:
+    input: resources/references/KEL_NG_007492.3.fasta
+    output: results/reference/KEL__KEL/reference.fasta
+    jobid: 8
+    reason: Missing output files: results/reference/KEL__KEL/reference.fasta
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/reference/KEL__KEL
+        cp resources/references/KEL_NG_007492.3.fasta results/reference/KEL__KEL/reference.fasta
+
+
+[Mon Sep 21 13:36:29 2026]
+rule combine_fastq_chunks:
+    input: ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_0.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_1.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_10.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_11.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_12.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_13.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_14.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_15.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_16.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_17.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_18.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_2.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_3.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_4.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_5.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_6.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_7.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_8.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_9.fastq.gz
+    output: results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz
+    log: results/logs/input/KEL__KEL__fragment1.combine.log
+    jobid: 2
+    reason: Missing output files: results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule combine_fastq_chunks:
+    input: ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_0.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_1.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_10.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_11.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_12.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_13.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_14.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_15.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_16.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_17.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_18.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_3.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_4.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_6.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_7.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_8.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_9.fastq.gz
+    output: results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz
+    log: results/logs/input/KEL__KEL__fragment2.combine.log
+    jobid: 3
+    reason: Missing output files: results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule build_analysis_target_bed:
+    input: config/kel.samples.tsv
+    output: results/targets/KEL__KEL/KEL__KEL.bed, results/targets/KEL__KEL/KEL__KEL.target_regions.tsv
+    jobid: 36
+    reason: Missing output files: results/targets/KEL__KEL/KEL__KEL.bed, results/targets/KEL__KEL/KEL__KEL.target_regions.tsv
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule input_manifest:
+    input: ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_0.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_1.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_10.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_11.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_12.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_13.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_14.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_15.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_16.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_17.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_18.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_2.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_3.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_4.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_5.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_6.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_7.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_8.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_9.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_0.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_1.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_10.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_11.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_12.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_13.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_14.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_15.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_16.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_17.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_18.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_3.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_4.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_6.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_7.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_8.fastq.gz, ../KEL_Barcodes_72_84 3/KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_9.fastq.gz
+    output: results/summary/input_manifest.tsv
+    jobid: 1
+    reason: Missing output files: results/summary/input_manifest.tsv
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule nanoplot_raw:
+    input: results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz
+    output: results/qc/raw/KEL__KEL__fragment2/NanoStats.txt
+    log: results/logs/qc/KEL__KEL__fragment2.nanoplot.log
+    jobid: 5
+    reason: Missing output files: results/qc/raw/KEL__KEL__fragment2/NanoStats.txt; Input files updated by another job: results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz
+    wildcards: unit=KEL__KEL__fragment2
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/qc/raw/KEL__KEL__fragment2 results/logs/qc
+        NanoPlot --fastq results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz \
+            --outdir results/qc/raw/KEL__KEL__fragment2 \
+            --threads 2 \
+            --no_static \
+            > results/logs/qc/KEL__KEL__fragment2.nanoplot.log 2>&1
+        test -s results/qc/raw/KEL__KEL__fragment2/NanoStats.txt
+
+
+[Mon Sep 21 13:36:29 2026]
+rule nanoplot_raw:
+    input: results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz
+    output: results/qc/raw/KEL__KEL__fragment1/NanoStats.txt
+    log: results/logs/qc/KEL__KEL__fragment1.nanoplot.log
+    jobid: 4
+    reason: Missing output files: results/qc/raw/KEL__KEL__fragment1/NanoStats.txt; Input files updated by another job: results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz
+    wildcards: unit=KEL__KEL__fragment1
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/qc/raw/KEL__KEL__fragment1 results/logs/qc
+        NanoPlot --fastq results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz \
+            --outdir results/qc/raw/KEL__KEL__fragment1 \
+            --threads 2 \
+            --no_static \
+            > results/logs/qc/KEL__KEL__fragment1.nanoplot.log 2>&1
+        test -s results/qc/raw/KEL__KEL__fragment1/NanoStats.txt
+
+
+[Mon Sep 21 13:36:29 2026]
+rule minimap2_index:
+    input: results/reference/KEL__KEL/reference.fasta
+    output: results/reference/KEL__KEL/reference.mmi
+    jobid: 9
+    reason: Missing output files: results/reference/KEL__KEL/reference.mmi; Input files updated by another job: results/reference/KEL__KEL/reference.fasta
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: minimap2 -d results/reference/KEL__KEL/reference.mmi results/reference/KEL__KEL/reference.fasta
+
+[Mon Sep 21 13:36:29 2026]
+rule align_amplicon:
+    input: results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz, results/reference/KEL__KEL/reference.fasta, results/reference/KEL__KEL/reference.mmi
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    log: results/logs/mapping/KEL__KEL__fragment2.minimap2.log
+    jobid: 11
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam; Input files updated by another job: results/reference/KEL__KEL/reference.mmi, results/reference/KEL__KEL/reference.fasta, results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz
+    wildcards: unit=KEL__KEL__fragment2
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/mapping/amplicons/KEL__KEL__fragment2 results/logs/mapping
+        minimap2 -t 2 -ax map-ont -R '@RG\tID:KEL__KEL__fragment2\tSM:KEL__KEL\tPL:ONT' \
+          results/reference/KEL__KEL/reference.mmi results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz 2> results/logs/mapping/KEL__KEL__fragment2.minimap2.log \
+          | samtools sort -@ 2 -o results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam -
+
+
+[Mon Sep 21 13:36:29 2026]
+rule align_amplicon:
+    input: results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz, results/reference/KEL__KEL/reference.fasta, results/reference/KEL__KEL/reference.mmi
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    log: results/logs/mapping/KEL__KEL__fragment1.minimap2.log
+    jobid: 7
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam; Input files updated by another job: results/reference/KEL__KEL/reference.fasta, results/reference/KEL__KEL/reference.mmi, results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz
+    wildcards: unit=KEL__KEL__fragment1
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/mapping/amplicons/KEL__KEL__fragment1 results/logs/mapping
+        minimap2 -t 2 -ax map-ont -R '@RG\tID:KEL__KEL__fragment1\tSM:KEL__KEL\tPL:ONT' \
+          results/reference/KEL__KEL/reference.mmi results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz 2> results/logs/mapping/KEL__KEL__fragment1.minimap2.log \
+          | samtools sort -@ 2 -o results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam -
+
+
+[Mon Sep 21 13:36:29 2026]
+rule amplicon_flagstat:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.flagstat.txt
+    jobid: 39
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.flagstat.txt; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools flagstat results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam > results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.flagstat.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule amplicon_alignment_qc:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    output: results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.length_mapq.tsv
+    jobid: 14
+    reason: Missing output files: results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.length_mapq.tsv, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule amplicon_alignment_qc:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    output: results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.length_mapq.tsv
+    jobid: 15
+    reason: Missing output files: results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.length_mapq.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule index_amplicon_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam.bai
+    jobid: 6
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam.bai; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule filter_variant_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    log: results/logs/mapping/KEL__KEL__fragment2.variant_filter.log
+    jobid: 19
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule amplicon_flagstat:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.flagstat.txt
+    jobid: 38
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.flagstat.txt; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools flagstat results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam > results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.flagstat.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule index_amplicon_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam.bai
+    jobid: 10
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam.bai; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule amplicon_coverage:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt
+    jobid: 13
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools coverage results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam > results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule filter_phasing_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam
+    log: results/logs/mapping/KEL__KEL__fragment2.phasing_filter.log
+    jobid: 23
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule merge_gene_bams:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+    log: results/logs/mapping/KEL__KEL.merge.log
+    jobid: 29
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam
+    wildcards: analysis=KEL__KEL
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/mapping/genes/KEL__KEL results/logs/mapping
+        samtools merge -@ 2 -f results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam 2> results/logs/mapping/KEL__KEL.merge.log
+
+
+[Mon Sep 21 13:36:29 2026]
+rule amplicon_coverage:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt
+    jobid: 12
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools coverage results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam > results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule filter_variant_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    log: results/logs/mapping/KEL__KEL__fragment1.variant_filter.log
+    jobid: 17
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule filter_phasing_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam
+    log: results/logs/mapping/KEL__KEL__fragment1.phasing_filter.log
+    jobid: 21
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule index_gene_bam:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam.bai
+    jobid: 28
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam.bai; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule variant_bam_depth:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.depth.tsv
+    jobid: 25
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.depth.tsv; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools depth -aa results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam > results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.depth.tsv
+
+[Mon Sep 21 13:36:29 2026]
+rule variant_bam_coverage:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.coverage.txt
+    jobid: 41
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.coverage.txt; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools coverage results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam > results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.coverage.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule index_variant_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam.bai
+    jobid: 18
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam.bai; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule index_phasing_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam.bai
+    jobid: 22
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam.bai; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule merge_gene_variant_bams:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+    log: results/logs/mapping/KEL__KEL.variant_merge.log
+    jobid: 32
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    wildcards: analysis=KEL__KEL
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/mapping/genes/KEL__KEL results/logs/mapping
+        samtools merge -@ 2 -f results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam 2> results/logs/mapping/KEL__KEL.variant_merge.log
+
+
+[Mon Sep 21 13:36:29 2026]
+rule variant_bam_depth:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.depth.tsv
+    jobid: 27
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.depth.tsv; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools depth -aa results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam > results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.depth.tsv
+
+[Mon Sep 21 13:36:29 2026]
+rule gene_coverage:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt
+    jobid: 30
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools coverage results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam > results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule variant_bam_coverage:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.coverage.txt
+    jobid: 40
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.coverage.txt; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools coverage results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam > results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.coverage.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule index_variant_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam.bai
+    jobid: 16
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam.bai; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule gene_flagstat:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.flagstat.txt
+    jobid: 43
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.flagstat.txt; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools flagstat results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam > results/mapping/genes/KEL__KEL/KEL__KEL.flagstat.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule index_phasing_bam:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam.bai
+    jobid: 20
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam.bai; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule merge_gene_phasing_bams:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam
+    log: results/logs/mapping/KEL__KEL.phasing_merge.log
+    jobid: 35
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam
+    wildcards: analysis=KEL__KEL
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/mapping/genes/KEL__KEL results/logs/mapping
+        samtools merge -@ 2 -f results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam 2> results/logs/mapping/KEL__KEL.phasing_merge.log
+
+
+[Mon Sep 21 13:36:29 2026]
+rule index_gene_variant_bam:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai
+    jobid: 31
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule gene_variant_flagstat:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.variant.flagstat.txt
+    jobid: 44
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.variant.flagstat.txt; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools flagstat results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam > results/mapping/genes/KEL__KEL/KEL__KEL.variant.flagstat.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule index_gene_phasing_bam:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai
+    jobid: 34
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools index results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam
+
+[Mon Sep 21 13:36:29 2026]
+rule core_intervals:
+    input: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.depth.tsv
+    output: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv
+    jobid: 26
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.depth.tsv
+    wildcards: unit=KEL__KEL__fragment2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule gene_variant_coverage:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt
+    jobid: 33
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools coverage results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam > results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule gene_phasing_flagstat:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam
+    output: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.flagstat.txt
+    jobid: 45
+    reason: Missing output files: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.flagstat.txt; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools flagstat results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam > results/mapping/genes/KEL__KEL/KEL__KEL.phasing.flagstat.txt
+
+[Mon Sep 21 13:36:29 2026]
+rule core_intervals:
+    input: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.depth.tsv
+    output: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv
+    jobid: 24
+    reason: Missing output files: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.depth.tsv
+    wildcards: unit=KEL__KEL__fragment1
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule amplicon_summary:
+    input: results/qc/raw/KEL__KEL__fragment1/NanoStats.txt, results/qc/raw/KEL__KEL__fragment2/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.flagstat.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.flagstat.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv, results/summary/input_manifest.tsv
+    output: results/summary/amplicon_summary.tsv
+    jobid: 37
+    reason: Missing output files: results/summary/amplicon_summary.tsv; Input files updated by another job: results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.flagstat.txt, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/raw/KEL__KEL__fragment1/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.coverage.txt, results/qc/raw/KEL__KEL__fragment2/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/summary/input_manifest.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.flagstat.txt
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule gene_summary:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.flagstat.txt, results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.variant.flagstat.txt, results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.flagstat.txt, results/summary/amplicon_summary.tsv
+    output: results/summary/gene_summary.tsv
+    jobid: 42
+    reason: Missing output files: results/summary/gene_summary.tsv; Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.flagstat.txt, results/mapping/genes/KEL__KEL/KEL__KEL.variant.flagstat.txt, results/summary/amplicon_summary.tsv, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.flagstat.txt, results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 13:36:29 2026]
+rule all:
+    input: results/summary/input_manifest.tsv, results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz, results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz, results/qc/raw/KEL__KEL__fragment1/NanoStats.txt, results/qc/raw/KEL__KEL__fragment2/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.length_mapq.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.length_mapq.tsv, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv, results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai, results/targets/KEL__KEL/KEL__KEL.bed, results/targets/KEL__KEL/KEL__KEL.target_regions.tsv, results/summary/amplicon_summary.tsv, results/summary/gene_summary.tsv
+    jobid: 0
+    reason: Input files updated by another job: results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/raw/KEL__KEL__fragment1/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam.bai, results/targets/KEL__KEL/KEL__KEL.bed, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.length_mapq.tsv, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam.bai, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.length_mapq.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam.bai, results/summary/amplicon_summary.tsv, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv, results/summary/gene_summary.tsv, results/summary/input_manifest.tsv, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai, results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz, results/qc/raw/KEL__KEL__fragment2/NanoStats.txt, results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam.bai, results/targets/KEL__KEL/KEL__KEL.target_regions.tsv
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+Job stats:
+job                          count
+-------------------------  -------
+build_analysis_target_bed        1
+combine_fastq_chunks             2
+input_manifest                   1
+stage_reference                  1
+minimap2_index                   1
+nanoplot_raw                     2
+align_amplicon                   2
+amplicon_alignment_qc            2
+amplicon_coverage                2
+amplicon_flagstat                2
+filter_phasing_bam               2
+filter_variant_bam               2
+index_amplicon_bam               2
+merge_gene_bams                  1
+gene_coverage                    1
+gene_flagstat                    1
+index_gene_bam                   1
+index_phasing_bam                2
+index_variant_bam                2
+merge_gene_phasing_bams          1
+merge_gene_variant_bams          1
+variant_bam_coverage             2
+variant_bam_depth                2
+core_intervals                   2
+gene_phasing_flagstat            1
+gene_variant_coverage            1
+gene_variant_flagstat            1
+index_gene_phasing_bam           1
+index_gene_variant_bam           1
+amplicon_summary                 1
+gene_summary                     1
+all                              1
+total                           46
+
+Reasons:
+    (check individual jobs above for details)
+    input files updated by another job:
+        align_amplicon, all, amplicon_alignment_qc, amplicon_coverage, amplicon_flagstat, amplicon_summary, core_intervals, filter_phasing_bam, filter_variant_bam, gene_coverage, gene_flagstat, gene_phasing_flagstat, gene_summary, gene_variant_coverage, gene_variant_flagstat, index_amplicon_bam, index_gene_bam, index_gene_phasing_bam, index_gene_variant_bam, index_phasing_bam, index_variant_bam, merge_gene_bams, merge_gene_phasing_bams, merge_gene_variant_bams, minimap2_index, nanoplot_raw, variant_bam_coverage, variant_bam_depth
+    output files have to be generated:
+        align_amplicon, amplicon_alignment_qc, amplicon_coverage, amplicon_flagstat, amplicon_summary, build_analysis_target_bed, combine_fastq_chunks, core_intervals, filter_phasing_bam, filter_variant_bam, gene_coverage, gene_flagstat, gene_phasing_flagstat, gene_summary, gene_variant_coverage, gene_variant_flagstat, index_amplicon_bam, index_gene_bam, index_gene_phasing_bam, index_gene_variant_bam, index_phasing_bam, index_variant_bam, input_manifest, merge_gene_bams, merge_gene_phasing_bams, merge_gene_variant_bams, minimap2_index, nanoplot_raw, stage_reference, variant_bam_coverage, variant_bam_depth
+This was a dry-run (flag -n). The order of jobs does not reflect the order of execution.

@@ -1,0 +1,86 @@
+{
+  "checked_at": "2026-09-21T11:40:09.559304+00:00",
+  "prefix": "<WORKSPACE>/setup/envs/clair3-arm64",
+  "python": "3.11.16 (main, Sep  2 2026, 23:33:55) [Clang 21.1.8 ]",
+  "machine": "arm64",
+  "conda_prefix": "<WORKSPACE>/setup/envs/clair3-arm64",
+  "scope": "Read-only installed-package/model checks; no sequencing data or variant calling.",
+  "status": "passed",
+  "torch": {
+    "version": "2.13.0",
+    "import_seconds": 21.664,
+    "path": "<WORKSPACE>/setup/envs/clair3-arm64/lib/python3.11/site-packages/torch/__init__.py",
+    "threads": 1,
+    "interop_threads": 1,
+    "cuda_available": false
+  },
+  "models": [
+    {
+      "name": "pileup",
+      "path": "<WORKSPACE>/setup/envs/clair3-arm64/bin/models/r1041_e82_400bps_hac_v520/pileup.pt",
+      "sha256": "3c6320c3f09ea8a77453d29caa977a69fb562c6f7d13b51389cb5f7513ae4c53",
+      "bytes": 8304746,
+      "state_dict_keys": 26,
+      "parameters": 2074520,
+      "add_indel_length": false,
+      "checkpoint_loaded_with_installed_clair3_loader": true,
+      "cpu_input_shape": [
+        1,
+        33,
+        18
+      ],
+      "cpu_output_shape": [
+        1,
+        24
+      ],
+      "cpu_output_all_finite": true
+    },
+    {
+      "name": "full_alignment",
+      "path": "<WORKSPACE>/setup/envs/clair3-arm64/bin/models/r1041_e82_400bps_hac_v520/full_alignment.pt",
+      "sha256": "d04662b6404b618332c8924d005a5493390a96d460d3b5b3515c9389ddb5d2b6",
+      "bytes": 11983414,
+      "state_dict_keys": 81,
+      "parameters": 2986522,
+      "add_indel_length": true,
+      "checkpoint_loaded_with_installed_clair3_loader": true,
+      "cpu_input_shape": [
+        1,
+        89,
+        33,
+        8
+      ],
+      "cpu_output_shape": [
+        1,
+        90
+      ],
+      "cpu_output_all_finite": true
+    }
+  ],
+  "clair3_version": "v2.0.3",
+  "pipeline_cli_compatible": true,
+  "parsed_pipeline_args": {
+    "var_pct_full": 1.0,
+    "ref_pct_full": 1.0,
+    "var_pct_phasing": 1.0,
+    "enable_variant_calling_at_sequence_head_and_tail": true,
+    "bed_fn": "/not-executed/targets.bed",
+    "sample_name": "KEL_PREFLIGHT",
+    "use_gpu": false,
+    "enable_dwell_time": false
+  },
+  "selected_device": "cpu",
+  "architecture_checks": [
+    "<WORKSPACE>/setup/envs/clair3-arm64/bin/python:             Mach-O 64-bit executable arm64",
+    "<WORKSPACE>/setup/envs/clair3-arm64/bin/libclair3.so:       Mach-O 64-bit bundle arm64",
+    "<WORKSPACE>/setup/envs/clair3-arm64/bin/pypy3.11/bin/pypy3: Mach-O 64-bit executable arm64"
+  ],
+  "caveats": [
+    "Successful checkpoint loading and one synthetic zero-tensor inference do not validate calling accuracy.",
+    "Installed CallVariants._select_device selects CUDA when requested and available, otherwise CPU; no MPS selection here.",
+    "hac_v520 model suitability still requires verified sequencing chemistry/basecaller metadata.",
+    "No move-table model is selected; FASTQ-remapped BAMs lack original Dorado mv tags.",
+    "Full workflow shell execution and read preprocessing are outside this preflight."
+  ],
+  "elapsed_seconds": 21.801
+}

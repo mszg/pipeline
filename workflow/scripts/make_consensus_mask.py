@@ -1,10 +1,14 @@
 from collections import defaultdict
+import csv
 from pathlib import Path
 
 fai = Path(str(snakemake.input.fai))
 target_bed = Path(str(snakemake.input.target_bed))
 uncertain_bed = Path(str(snakemake.input.uncertain_bed))
 low_depth_bed = Path(str(snakemake.input.low_depth_bed))
+support_tsv = Path(str(snakemake.input.support_tsv))
+haplotype = int(snakemake.params.haplotype)
+callable_min_depth = int(snakemake.params.callable_min_depth)
 out = Path(str(snakemake.output.bed))
 out.parent.mkdir(parents=True, exist_ok=True)
 
@@ -42,6 +46,47 @@ def merge(intervals):
     return out_intervals
 
 
+def subtract(intervals, exclusions):
+    """Subtract supported deletion spans from low-base-depth intervals only."""
+    result = []
+    for chrom, start, end in intervals:
+        parts = [(start, end)]
+        for other_chrom, left, right in exclusions:
+            if other_chrom != chrom:
+                continue
+            updated = []
+            for a, b in parts:
+                if right <= a or left >= b:
+                    updated.append((a, b))
+                else:
+                    if a < left:
+                        updated.append((a, left))
+                    if right < b:
+                        updated.append((right, b))
+            parts = updated
+        result.extend((chrom, a, b) for a, b in parts)
+    return result
+
+
+supported_deletions = []
+with support_tsv.open() as handle:
+    for row in csv.DictReader(handle, delimiter="\t"):
+        if row["STATUS"] != "ACCEPT" or row["TYPE"] != "DEL":
+            continue
+        alleles = row["PHASED_GT"].replace("|", "/").split("/")
+        if len(alleles) != 2 or alleles[haplotype - 1] != "1":
+            continue
+        if int(row[f"HP{haplotype}_ALT"]) < callable_min_depth:
+            continue
+        ref_allele, alt_allele = row["REF"], row["ALT"]
+        if len(alt_allele) != 1 or not ref_allele.startswith(alt_allele):
+            raise ValueError("Accepted deletion is not a normalized anchored deletion")
+        start = int(row["POS"]) - 1
+        # Keep the anchor as well: bcftools skips the entire variant if any
+        # reference base in its allele span intersects the consensus mask.
+        supported_deletions.append((row["CHROM"], start, start + len(ref_allele)))
+
+
 contigs = []
 lengths = {}
 with fai.open() as handle:
@@ -71,7 +116,25 @@ for chrom in contigs:
         mask.append((chrom, cursor, length))
 
 mask.extend(read_intervals(uncertain_bed))
-mask.extend(read_intervals(low_depth_bed))
+# Deletions have no aligned query base at the deleted reference positions.
+# Rescue only an accepted ALT on this haplotype with enough exact ALT reads.
+# If an immutable mask or low-depth anchor blocks application of the deletion,
+# retain its low-depth mask so skipped variants cannot expose reference bases.
+# Outside-target and uncertainty masks are never relaxed.
+low_depth = read_intervals(low_depth_bed)
+
+
+def overlaps(chrom, start, end, intervals):
+    return any(chrom == other_chrom and start < right and end > left
+               for other_chrom, left, right in intervals)
+
+
+rescuable_deletions = []
+for chrom, start, end in supported_deletions:
+    if overlaps(chrom, start, end, mask) or overlaps(chrom, start, start + 1, low_depth):
+        continue
+    rescuable_deletions.append((chrom, start + 1, end))
+mask.extend(subtract(low_depth, rescuable_deletions))
 mask = merge(mask)
 
 order = {chrom: i for i, chrom in enumerate(contigs)}

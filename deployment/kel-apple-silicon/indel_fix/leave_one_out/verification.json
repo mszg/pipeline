@@ -1,0 +1,201 @@
+{
+  "scope": "Leave one variant out of haplotagging, retain existing phase orientation and original genotype for support evaluation. This tests direct tagging circularity, not independent phase truth.",
+  "thresholds": {
+    "min_support_depth": 20,
+    "min_het_alt_fraction": 0.3,
+    "min_het_delta": 0.25,
+    "min_hom_alt_fraction": 0.8,
+    "max_other_fraction": 0.25,
+    "require_pass": true,
+    "mpileup_max_depth": 100000
+  },
+  "production_vcf_and_support_hashes_unchanged": {
+    "workflow/results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz": "aebc354d1b65e05117c64153a58f8c9daf8580bf3bee3ca09fc0d99c6ac2ab17",
+    "workflow/results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz": "40907a311a9de5124bfb6f9eedcb85df399e8ca4195c39a9301e7ea4a94db303",
+    "workflow/results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv": "4efdffcb9d81381de54d04d8613f09bce39646d43f38ba25e6426f8ee7d23965"
+  },
+  "cases": [
+    {
+      "withheld_variant": [
+        "NG_007492.3",
+        560,
+        "CCT",
+        "C"
+      ],
+      "original": {
+        "CHROM": "NG_007492.3",
+        "POS": "560",
+        "REF": "CCT",
+        "ALT": "C",
+        "QUAL": "43.38",
+        "FILTER": "PASS",
+        "ORIGINAL_GT": "0/1",
+        "PHASED_GT": "0|1",
+        "PS": "516",
+        "TYPE": "DEL",
+        "HP1_REF": "7136",
+        "HP1_ALT": "26",
+        "HP1_OTHER": "635",
+        "HP1_ALT_FRAC": "0.0036",
+        "HP1_OTHER_FRAC": "0.0814",
+        "HP2_REF": "95",
+        "HP2_ALT": "757",
+        "HP2_OTHER": "108",
+        "HP2_ALT_FRAC": "0.8885",
+        "HP2_OTHER_FRAC": "0.1125",
+        "ALT_FRAC_DELTA": "0.8849",
+        "STATUS": "ACCEPT",
+        "REASON": "phased_heterozygous_supported",
+        "SUPPORT_METHOD": "aligned_allele_window"
+      },
+      "leave_one_out": {
+        "CHROM": "NG_007492.3",
+        "POS": "560",
+        "REF": "CCT",
+        "ALT": "C",
+        "QUAL": "43.38",
+        "FILTER": "PASS",
+        "ORIGINAL_GT": "0/1",
+        "PHASED_GT": "0|1",
+        "PS": "516",
+        "TYPE": "DEL",
+        "HP1_REF": "7104",
+        "HP1_ALT": "80",
+        "HP1_OTHER": "599",
+        "HP1_ALT_FRAC": "0.0111",
+        "HP1_OTHER_FRAC": "0.0770",
+        "HP2_REF": "291",
+        "HP2_ALT": "755",
+        "HP2_OTHER": "155",
+        "HP2_ALT_FRAC": "0.7218",
+        "HP2_OTHER_FRAC": "0.1291",
+        "ALT_FRAC_DELTA": "0.7107",
+        "STATUS": "ACCEPT",
+        "REASON": "phased_heterozygous_supported",
+        "SUPPORT_METHOD": "aligned_allele_window"
+      },
+      "original_assignments": {
+        "1": 32100,
+        "unassigned": 32267,
+        "2": 21523
+      },
+      "leave_one_out_assignments": {
+        "1": 32086,
+        "2": 21764,
+        "unassigned": 32040
+      },
+      "assignment_transitions": {
+        "1->1": 32028,
+        "1->unassigned": 72,
+        "2->2": 21518,
+        "2->unassigned": 5,
+        "unassigned->1": 58,
+        "unassigned->2": 246,
+        "unassigned->unassigned": 31963
+      },
+      "original_phase_sets": {
+        "516": 53623
+      },
+      "leave_one_out_phase_sets": {
+        "516": 53850
+      },
+      "all_variant_status_changes": [
+        {
+          "variant": [
+            "NG_007492.3",
+            727,
+            "G",
+            "A"
+          ],
+          "before": "UNRESOLVED",
+          "after": "ACCEPT"
+        }
+      ]
+    },
+    {
+      "withheld_variant": [
+        "NG_007492.3",
+        714,
+        "G",
+        "C"
+      ],
+      "original": {
+        "CHROM": "NG_007492.3",
+        "POS": "714",
+        "REF": "G",
+        "ALT": "C",
+        "QUAL": "25.44",
+        "FILTER": "PASS",
+        "ORIGINAL_GT": "0/1",
+        "PHASED_GT": "0|1",
+        "PS": "516",
+        "TYPE": "SNV",
+        "HP1_REF": "7837",
+        "HP1_ALT": "35",
+        "HP1_OTHER": "98",
+        "HP1_ALT_FRAC": "0.0044",
+        "HP1_OTHER_FRAC": "0.0123",
+        "HP2_REF": "457",
+        "HP2_ALT": "474",
+        "HP2_OTHER": "30",
+        "HP2_ALT_FRAC": "0.5091",
+        "HP2_OTHER_FRAC": "0.0312",
+        "ALT_FRAC_DELTA": "0.5047",
+        "STATUS": "ACCEPT",
+        "REASON": "phased_heterozygous_supported",
+        "SUPPORT_METHOD": "pileup_base"
+      },
+      "leave_one_out": {
+        "CHROM": "NG_007492.3",
+        "POS": "714",
+        "REF": "G",
+        "ALT": "C",
+        "QUAL": "25.44",
+        "FILTER": "PASS",
+        "ORIGINAL_GT": "0/1",
+        "PHASED_GT": "0|1",
+        "PS": "516",
+        "TYPE": "SNV",
+        "HP1_REF": "7764",
+        "HP1_ALT": "37",
+        "HP1_OTHER": "98",
+        "HP1_ALT_FRAC": "0.0047",
+        "HP1_OTHER_FRAC": "0.0124",
+        "HP2_REF": "760",
+        "HP2_ALT": "474",
+        "HP2_OTHER": "30",
+        "HP2_ALT_FRAC": "0.3841",
+        "HP2_OTHER_FRAC": "0.0237",
+        "ALT_FRAC_DELTA": "0.3794",
+        "STATUS": "ACCEPT",
+        "REASON": "phased_heterozygous_supported",
+        "SUPPORT_METHOD": "pileup_base"
+      },
+      "original_assignments": {
+        "1": 32100,
+        "unassigned": 32267,
+        "2": 21523
+      },
+      "leave_one_out_assignments": {
+        "1": 32029,
+        "2": 21826,
+        "unassigned": 32035
+      },
+      "assignment_transitions": {
+        "1->1": 32027,
+        "1->unassigned": 73,
+        "2->2": 21523,
+        "unassigned->1": 2,
+        "unassigned->2": 303,
+        "unassigned->unassigned": 31962
+      },
+      "original_phase_sets": {
+        "516": 53623
+      },
+      "leave_one_out_phase_sets": {
+        "516": 53855
+      },
+      "all_variant_status_changes": []
+    }
+  ]
+}

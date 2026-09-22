@@ -247,5 +247,15 @@ if run_consensus:
 
 
 rule all:
+    default_target: True
     input:
         final_targets
+
+
+# Reference-independent entry point for inspecting a new locus before its
+# reference and primer-defined target intervals are available.
+rule qc_only:
+    input:
+        "results/summary/input_manifest.tsv",
+        expand("results/input/{unit}/{unit}.combined.fastq.gz", unit=UNIT_IDS),
+        expand("results/qc/raw/{unit}/NanoStats.txt", unit=UNIT_IDS)

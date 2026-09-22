@@ -1,0 +1,18 @@
+# Standalone native core/controller environment; Clair3 needs a separate env.
+# Exact solved packages are in kel-native.osx-arm64.explicit.txt.
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.12.14
+  - snakemake-minimal=9.27.0
+  - minimap2=2.31
+  - samtools=1.24
+  - pysam=0.24.1
+  - nanoplot=1.48.0
+  - filtlong=0.3.1
+  - gzip=1.14
+  - bcftools=1.24
+  - htslib=1.24
+  - whatshap=2.8

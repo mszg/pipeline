@@ -1,0 +1,10 @@
+# Apply after kel.yaml: --configfile config/kel.yaml config/kel.calling.yaml
+# Native Clair3 v2 uses PyTorch models, a change from historical ABO validation.
+workflow:
+  run_variant_calling: true
+  run_phasing: true
+  run_haplotype_reconstruction: false
+  run_consensus: false
+clair3:
+  executable: "../setup/run_clair3.sh"
+  model_path: "../setup/envs/clair3-arm64/bin/models/r1041_e82_400bps_hac_v520"

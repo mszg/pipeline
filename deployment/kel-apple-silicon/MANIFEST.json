@@ -1,0 +1,424 @@
+{
+  "scope": "Published code, environment locks and selected validation evidence; sequencing files, installed environments, models and full input audits remain local",
+  "files": [
+    {
+      "file": "RUNBOOK.md",
+      "source": "setup/README.md",
+      "source_sha256": "5d859511d95d21ba4e5ee1e82cac883794335a255c7383aae7eb8ccd39b4c7ea",
+      "published_sha256": "5d859511d95d21ba4e5ee1e82cac883794335a255c7383aae7eb8ccd39b4c7ea",
+      "publication_edits": []
+    },
+    {
+      "file": "VALIDATION.md",
+      "source": "setup/VALIDATION.md",
+      "source_sha256": "0bb36d9f235ae081c7f8460a391b8a3ff37b102217b90def15901ef06b23f0e8",
+      "published_sha256": "0bb36d9f235ae081c7f8460a391b8a3ff37b102217b90def15901ef06b23f0e8",
+      "publication_edits": []
+    },
+    {
+      "file": "apple_silicon_compatibility.md",
+      "source": "setup/apple_silicon_compatibility.md",
+      "source_sha256": "af039d7a5779c1079d6ebd3913cc3ebf7148686cb5135617ff5e0b66c84bf140",
+      "published_sha256": "af039d7a5779c1079d6ebd3913cc3ebf7148686cb5135617ff5e0b66c84bf140",
+      "publication_edits": []
+    },
+    {
+      "file": "run_snakemake.sh",
+      "source": "setup/run_snakemake.sh",
+      "source_sha256": "18e350235c0ee718c36b235fbd7a6ca5b1d692c4c295bc29061516e2d1bb774b",
+      "published_sha256": "18e350235c0ee718c36b235fbd7a6ca5b1d692c4c295bc29061516e2d1bb774b",
+      "publication_edits": []
+    },
+    {
+      "file": "run_clair3.sh",
+      "source": "setup/run_clair3.sh",
+      "source_sha256": "520924fa2239ed464fd843b0588623a7a2f9e4a15d67c39b0e69f57bc1ea6e31",
+      "published_sha256": "520924fa2239ed464fd843b0588623a7a2f9e4a15d67c39b0e69f57bc1ea6e31",
+      "publication_edits": []
+    },
+    {
+      "file": "kel-native.yaml",
+      "source": "setup/kel-native.yaml",
+      "source_sha256": "f5ff0faaea87289ef2b0dcdfadd30f388d8f0cc15e9dc86664638e5d2821f86f",
+      "published_sha256": "f5ff0faaea87289ef2b0dcdfadd30f388d8f0cc15e9dc86664638e5d2821f86f",
+      "publication_edits": []
+    },
+    {
+      "file": "clair3.yaml",
+      "source": "setup/clair3.yaml",
+      "source_sha256": "7f4b3b20f4f7570aee0fdb0986072fc8b4245d0ed960d4c6962910a8ba6e699a",
+      "published_sha256": "7f4b3b20f4f7570aee0fdb0986072fc8b4245d0ed960d4c6962910a8ba6e699a",
+      "publication_edits": []
+    },
+    {
+      "file": "kel-native.osx-arm64.explicit.txt",
+      "source": "setup/kel-native.osx-arm64.explicit.txt",
+      "source_sha256": "da8c229c3088d619efcc5848fd8847ebd9fa4a2ece7d425a8d5207f3cb283970",
+      "published_sha256": "da8c229c3088d619efcc5848fd8847ebd9fa4a2ece7d425a8d5207f3cb283970",
+      "publication_edits": []
+    },
+    {
+      "file": "clair3.osx-arm64.explicit.txt",
+      "source": "setup/clair3.osx-arm64.explicit.txt",
+      "source_sha256": "a6c167e7f19a7d72f19d3ed864ebde0c989c50eb1788d8a472900635bc50e9e4",
+      "published_sha256": "a6c167e7f19a7d72f19d3ed864ebde0c989c50eb1788d8a472900635bc50e9e4",
+      "publication_edits": []
+    },
+    {
+      "file": "clair3_preflight.py",
+      "source": "setup/clair3_preflight.py",
+      "source_sha256": "9451366aff1b0b7214948c3e97d4d444f312da5546d2299d91ab202cb5d1cad5",
+      "published_sha256": "affa81100f44147df454e03bf9d461e86f5bb10c02c3be152a651d1add9783d5",
+      "publication_edits": [
+        "Derive workspace from deployed script location"
+      ]
+    },
+    {
+      "file": "audit_kel_inputs.py",
+      "source": "setup/audit_kel_inputs.py",
+      "source_sha256": "0dd1140db1f8ccbdb34bb4ca5673d24e7eac94aca2e9da1e38d86f9009b1a563",
+      "published_sha256": "0dd1140db1f8ccbdb34bb4ca5673d24e7eac94aca2e9da1e38d86f9009b1a563",
+      "publication_edits": []
+    },
+    {
+      "file": "verify_kel_outputs.py",
+      "source": "setup/verify_kel_outputs.py",
+      "source_sha256": "5ddcade08d0f579509e5db51fdc531c66e11c89d6b9a3905dc4ec6395e6e4008",
+      "published_sha256": "5ddcade08d0f579509e5db51fdc531c66e11c89d6b9a3905dc4ec6395e6e4008",
+      "publication_edits": []
+    },
+    {
+      "file": "verify_kel_calling.py",
+      "source": "setup/verify_kel_calling.py",
+      "source_sha256": "7ace264afb2d899ae3a020eaff700e5b3a53e26afba750e1b90bade2a24aa2d6",
+      "published_sha256": "7ace264afb2d899ae3a020eaff700e5b3a53e26afba750e1b90bade2a24aa2d6",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_support_audit.py",
+      "source": "setup/indel_support_audit.py",
+      "source_sha256": "92b67fa4e647107a1e17f289f6ed0e8f2eaca2a7855c022e4bb183a5d070fa74",
+      "published_sha256": "92b67fa4e647107a1e17f289f6ed0e8f2eaca2a7855c022e4bb183a5d070fa74",
+      "publication_edits": []
+    },
+    {
+      "file": "reference_provenance.json",
+      "source": "setup/reference_provenance.json",
+      "source_sha256": "6cc496be729a70c319b1a51621cba1dc4d698fbd9243dc138569aac078956243",
+      "published_sha256": "6cc496be729a70c319b1a51621cba1dc4d698fbd9243dc138569aac078956243",
+      "publication_edits": []
+    },
+    {
+      "file": "tool_versions.json",
+      "source": "setup/tool_versions.json",
+      "source_sha256": "07ef47cf3d15aeae2c55f4b1d33ac7714920120b9cf8d2ee912ef17145292916",
+      "published_sha256": "07ef47cf3d15aeae2c55f4b1d33ac7714920120b9cf8d2ee912ef17145292916",
+      "publication_edits": []
+    },
+    {
+      "file": "clair3_preflight.json",
+      "source": "setup/clair3_preflight.json",
+      "source_sha256": "7cb2a7d99a4174a1b79b134fb38c31fae956c1d281c5aba05b77dc97384b2f72",
+      "published_sha256": "829e04ec8003cd98cb702191dda037ed986135363a947430c59a84806b2f5808",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    },
+    {
+      "file": "kel_calling_verification.json",
+      "source": "setup/kel_calling_verification.json",
+      "source_sha256": "6b17f8778f9ef11a0844724b3f45c36d9bcd80b0139d18797b5e694478a4c94a",
+      "published_sha256": "6b17f8778f9ef11a0844724b3f45c36d9bcd80b0139d18797b5e694478a4c94a",
+      "publication_edits": []
+    },
+    {
+      "file": "kel_core_verification.json",
+      "source": "setup/kel_core_verification.json",
+      "source_sha256": "8ff5a0771a1da218e59b1de99204ffa762ae131a2de2f7923052fee0eee9d570",
+      "published_sha256": "8ff5a0771a1da218e59b1de99204ffa762ae131a2de2f7923052fee0eee9d570",
+      "publication_edits": []
+    },
+    {
+      "file": "kel_target_filter_audit.json",
+      "source": "setup/kel_target_filter_audit.json",
+      "source_sha256": "73dd34e701ad6ced5d3f88b4b68791227fa026a75d052401e361da1a87f3b7ff",
+      "published_sha256": "73dd34e701ad6ced5d3f88b4b68791227fa026a75d052401e361da1a87f3b7ff",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_support_audit.json",
+      "source": "setup/indel_support_audit.json",
+      "source_sha256": "21baa301190515354046cecf311d020933aa3614ae6b6aff363f8dbb63286124",
+      "published_sha256": "2b7fac28b34fdc1ef0967a88377b2a2224c66ac5afc7ef00c896e7e2a10a06e7",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    },
+    {
+      "file": "smoke/generate_fixture.py",
+      "source": "setup/smoke/generate_fixture.py",
+      "source_sha256": "6d3a35d9f791bbac8fcb95de781ea0841769022688975987b131331a8621ddec",
+      "published_sha256": "6d3a35d9f791bbac8fcb95de781ea0841769022688975987b131331a8621ddec",
+      "publication_edits": []
+    },
+    {
+      "file": "smoke/config.yaml",
+      "source": "setup/smoke/config.yaml",
+      "source_sha256": "798dd6421b5ab888c4c199fc17e347d1d5e59007f05d1732736e9922a965c779",
+      "published_sha256": "4dcf0876191fed724be4e47bda46b1e472a8305ab7509e910cfafb6d73c2d2ea",
+      "publication_edits": [
+        "Use workspace-relative sample path; isolated smoke command overrides it explicitly"
+      ]
+    },
+    {
+      "file": "smoke/README.md",
+      "source": "setup/smoke/README.md",
+      "source_sha256": "103572379ad53e529ea8ed27d8a8bba256e26a9587c0df1a136c0057b932f333",
+      "published_sha256": "8b5c69e902e507d0a9d1fc489a499d2403b7ae886ed891b8dde747518ba67e26",
+      "publication_edits": []
+    },
+    {
+      "file": "smoke/verification.json",
+      "source": "setup/smoke/verification.json",
+      "source_sha256": "4cd820f4133618de0d760071776bef45e66087226efe0b113da0cb5040639238",
+      "published_sha256": "4cd820f4133618de0d760071776bef45e66087226efe0b113da0cb5040639238",
+      "publication_edits": []
+    },
+    {
+      "file": "clair3_smoke/run.py",
+      "source": "setup/clair3_smoke/run.py",
+      "source_sha256": "fe08ec34dd6a939664d1957da27ee75ac46972a94881c531aa9627c5871dec99",
+      "published_sha256": "e37bae7322d05501054514ee2ff6f963f718c585c5b719f33e7a817ce6cd406a",
+      "publication_edits": [
+        "Derive workspace from deployed script location"
+      ]
+    },
+    {
+      "file": "clair3_smoke/summary.json",
+      "source": "setup/clair3_smoke/summary.json",
+      "source_sha256": "9ba6e430ca7ca3b7686750522bc0d1c5638ae8ff39a9916bcf23ef75f7e4309c",
+      "published_sha256": "f36f6fe7f01d719c5681d2fd1399388ed0b8fddffd4d99149d9933e621314a3e",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    },
+    {
+      "file": "clair3_candidate_smoke/run.py",
+      "source": "setup/clair3_candidate_smoke/run.py",
+      "source_sha256": "a54120f11bf8e3c0a8c1d965db1937a4fe45e27eadb1e63dda17bf0d022c9b79",
+      "published_sha256": "8087f920ccfa842f1d8e71f57d6a47ab52a4964faa379db4365ea80d9e329491",
+      "publication_edits": [
+        "Derive workspace from deployed script location"
+      ]
+    },
+    {
+      "file": "clair3_candidate_smoke/summary.json",
+      "source": "setup/clair3_candidate_smoke/summary.json",
+      "source_sha256": "0547e40151c65f1781649e21ba7a49d4afeea521495755c80b0066ec395d8ba7",
+      "published_sha256": "ea6325264a3613037a3cf6aadf89ff7dabb648035e4d1335b3afd520986440a2",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    },
+    {
+      "file": "indel_fix/verify_kel_reconstruction.py",
+      "source": "setup/indel_fix/verify_kel_reconstruction.py",
+      "source_sha256": "4be6405ff60ac1dc571d9dcfb5042f10bb9d9fda51a6dc2272a3b80c4db2204f",
+      "published_sha256": "4be6405ff60ac1dc571d9dcfb5042f10bb9d9fda51a6dc2272a3b80c4db2204f",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/compare_legacy_kel.py",
+      "source": "setup/indel_fix/compare_legacy_kel.py",
+      "source_sha256": "3da79e4db5a8443775f16ee6ca84b7294c328598566bbc8ae119868650ca510b",
+      "published_sha256": "3da79e4db5a8443775f16ee6ca84b7294c328598566bbc8ae119868650ca510b",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/leave_one_out.py",
+      "source": "setup/indel_fix/leave_one_out.py",
+      "source_sha256": "29c37d94f0a8865f8b879823c50d330088b7e43f173c0dfba9c7c0f068f3c7be",
+      "published_sha256": "29c37d94f0a8865f8b879823c50d330088b7e43f173c0dfba9c7c0f068f3c7be",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/before/haplotype_variant_support.py",
+      "source": "setup/indel_fix/before/haplotype_variant_support.py",
+      "source_sha256": "4b8eec0e51799a4b414bac4e069ee58ac8f98237b3d1112a628e9714bfb8aa86",
+      "published_sha256": "4b8eec0e51799a4b414bac4e069ee58ac8f98237b3d1112a628e9714bfb8aa86",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/before/make_consensus_mask.py",
+      "source": "setup/indel_fix/before/make_consensus_mask.py",
+      "source_sha256": "731cc8e36813522d0e049ad307ae1a6430e29a1e853f8c9e6663e195456791c1",
+      "published_sha256": "731cc8e36813522d0e049ad307ae1a6430e29a1e853f8c9e6663e195456791c1",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/kel_reconstruction_verification.json",
+      "source": "setup/indel_fix/kel_reconstruction_verification.json",
+      "source_sha256": "dab3e4d80eeb264b020cd84e11c8b5339ba88d320139d18bbbe6f13b3d3a9b85",
+      "published_sha256": "dab3e4d80eeb264b020cd84e11c8b5339ba88d320139d18bbbe6f13b3d3a9b85",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/kel_legacy_comparison.json",
+      "source": "setup/indel_fix/kel_legacy_comparison.json",
+      "source_sha256": "9722c342844898adeb3c88568205cdd6d4c72ca17260a2edd2bd57757914c520",
+      "published_sha256": "9722c342844898adeb3c88568205cdd6d4c72ca17260a2edd2bd57757914c520",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/unit-tests.log",
+      "source": "setup/indel_fix/unit-tests.log",
+      "source_sha256": "686577d21dedb0163a50f244a425c86c81166379292fca95ca41c3af21ee101c",
+      "published_sha256": "686577d21dedb0163a50f244a425c86c81166379292fca95ca41c3af21ee101c",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/integration-before-coverage-fix.log",
+      "source": "setup/indel_fix/integration-before-coverage-fix.log",
+      "source_sha256": "5c70fdae135891f0c328ff76a8d08e63f4814b2d1bb0798394e743c127ed2e28",
+      "published_sha256": "ae8bde8972615efc362ed77985b4f80202015c5130e32849f457d5547849ed26",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    },
+    {
+      "file": "indel_fix/portable-integration.log",
+      "source": "setup/indel_fix/portable-integration.log",
+      "source_sha256": "eee5a5f818cee68538cc354d2ee1ae0f27b376e9af9113834d918361d2a5582c",
+      "published_sha256": "e145b0d14e9d9e9781c16cec47c491409598604c5c8b2e9b9313f13dca3ddaa7",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    },
+    {
+      "file": "indel_fix/portable_synthetic/verification.json",
+      "source": "setup/indel_fix/portable_synthetic/verification.json",
+      "source_sha256": "e6a083ce1631d624142ea508b6441fbd145dbe5e277d724f131f21fe9f1a16a5",
+      "published_sha256": "e6a083ce1631d624142ea508b6441fbd145dbe5e277d724f131f21fe9f1a16a5",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/leave_one_out/README.md",
+      "source": "setup/indel_fix/leave_one_out/README.md",
+      "source_sha256": "de62c0b294fda67a86d2980d6e6648812bc1a480f694eb7099e4c432d967a94f",
+      "published_sha256": "de62c0b294fda67a86d2980d6e6648812bc1a480f694eb7099e4c432d967a94f",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/leave_one_out/verification.json",
+      "source": "setup/indel_fix/leave_one_out/verification.json",
+      "source_sha256": "79a471b09b6ba1f2016fbcd067dfe178bbd3f6aff49c382345302eda77628784",
+      "published_sha256": "79a471b09b6ba1f2016fbcd067dfe178bbd3f6aff49c382345302eda77628784",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/leave_one_out/retained_records_verification.json",
+      "source": "setup/indel_fix/leave_one_out/retained_records_verification.json",
+      "source_sha256": "dddc3f2c8a636c7f2d78771c371bf97bffe061f21886d322a14305e972556a42",
+      "published_sha256": "dddc3f2c8a636c7f2d78771c371bf97bffe061f21886d322a14305e972556a42",
+      "publication_edits": []
+    },
+    {
+      "file": "indel_fix/kel-reconstruction-dry-run.log",
+      "source": "setup/indel_fix/kel-reconstruction-dry-run.log",
+      "source_sha256": "b76becb753734e16e0a269ac948fb62693025fe21b43d0d5976b0dc0f21f5254",
+      "published_sha256": "eb0b0441878e58f0905e4b5ff76c4c69135e58d1091054d37a55a27d76cf944a",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "indel_fix/kel-reconstruction-run.log",
+      "source": "setup/indel_fix/kel-reconstruction-run.log",
+      "source_sha256": "284d23448f2e9da741d2a14f642df4d5d281b82e96c70c91392a50079ca02f42",
+      "published_sha256": "724133799549d42407856eb804c179e1c389edfa2f94b1930c26596b329fc006",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "indel_fix/kel-mask-final-dry-run.log",
+      "source": "setup/indel_fix/kel-mask-final-dry-run.log",
+      "source_sha256": "f578360daeda937bda29268b75683d55811a05cb6944c8a545efad65c9d656c2",
+      "published_sha256": "0123b35354e1e6ed160c4bbec4bf12e5fbd19229c3a119f5985780a79970d4ed",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "indel_fix/kel-mask-final-run.log",
+      "source": "setup/indel_fix/kel-mask-final-run.log",
+      "source_sha256": "58ff2ee2705a6cde59aa52638cf8f9119e107f076ac0b35fc1e99f727d9f0e94",
+      "published_sha256": "b304bd678f1c2ccdcde8ada43f2ff39e38e187edaa34a8c6424f8aca45aa845e",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "indel_fix/kel-final-dry-run.log",
+      "source": "setup/indel_fix/kel-final-dry-run.log",
+      "source_sha256": "384c0d01d9bd8a230b8598e6067009e5dd36b254deed73d56fb22026478a7379",
+      "published_sha256": "116bab0d6ff13d9e61caa80c207f210f0bbf726d47431bd129ccd82739550572",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    },
+    {
+      "file": "logs/kel-core-dry-run.log",
+      "source": "setup/logs/kel-core-dry-run.log",
+      "source_sha256": "fe9151e03aa87ad740c7f0e8a4576f0546ab25aabd23e1bdaaf5dbba581e8009",
+      "published_sha256": "39a1913ad33af5455a585a908c4767d6c63a7eaa677ebb177f26cf74daf10cb1",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "logs/kel-core-run.log",
+      "source": "setup/logs/kel-core-run.log",
+      "source_sha256": "ff89c22863b5ab187864ac818de9b7cf91007b708cff22a5efa6e8dc4b08149c",
+      "published_sha256": "db7718d109c74d902f1fd19bfc10d63b2bab77a0b682bf72054cbc56d55cb4ee",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "logs/kel-calling-dry-run.log",
+      "source": "setup/logs/kel-calling-dry-run.log",
+      "source_sha256": "3a5288b16279052cc7eb82bce42c1b523ff3590dff4d0af443e8ece2227926da",
+      "published_sha256": "56a7d8670acb12bf302c7b665f40ac813b84819cdc986eb8b16afb6358c53ed1",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "logs/kel-calling-run.log",
+      "source": "setup/logs/kel-calling-run.log",
+      "source_sha256": "eb17dece57d3f078be9f3e5ef8051e2d62dd1065dca6beccb379e069cf97e083",
+      "published_sha256": "8f9d5f9d09b7dbf5d43466b5fd90d773512e47545ddd7fd76ada3efe9526905a",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>",
+        "Remove trailing whitespace from copied execution log"
+      ]
+    },
+    {
+      "file": "logs/kel-final-dry-run.log",
+      "source": "setup/logs/kel-final-dry-run.log",
+      "source_sha256": "dac50d0df12fd03614044e29077c9c491fbdc62d27d7862e55a06bce88593c92",
+      "published_sha256": "3270b75784230bd635ab1aff9e0b965dd690882fe57fdd69bdf871865af71c5a",
+      "publication_edits": [
+        "Replace historical local workspace prefix with <WORKSPACE>"
+      ]
+    }
+  ]
+}

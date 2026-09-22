@@ -1,0 +1,124 @@
+{
+  "source": "<WORKSPACE>/workflow/workflow/scripts/haplotype_variant_support.py",
+  "source_sha256": "4b8eec0e51799a4b414bac4e069ee58ac8f98237b3d1112a628e9714bfb8aa86",
+  "scope": "Function-level read-only audit; no workflow or biological validation performed",
+  "interpretation": "Unexpected counts reproduce an exact-indel support classification defect",
+  "cases": [
+    {
+      "name": "deletion_placeholders_and_reference_skips_are_not_exact_ref",
+      "ref": "AC",
+      "alt": "A",
+      "pileup_bases": "*#<>",
+      "expected": {
+        "ref": 0,
+        "alt": 0,
+        "other": 4,
+        "supported": true
+      },
+      "observed": {
+        "ref": 4,
+        "alt": 0,
+        "other": 0,
+        "supported": true
+      },
+      "matches_expected": false
+    },
+    {
+      "name": "ambiguous_or_mismatching_indel_anchors_are_not_exact_ref",
+      "ref": "AC",
+      "alt": "A",
+      "pileup_bases": "NnGg",
+      "expected": {
+        "ref": 0,
+        "alt": 0,
+        "other": 4,
+        "supported": true
+      },
+      "observed": {
+        "ref": 4,
+        "alt": 0,
+        "other": 0,
+        "supported": true
+      },
+      "matches_expected": false
+    },
+    {
+      "name": "matching_insertion_with_wrong_anchor_is_not_exact_alt",
+      "ref": "A",
+      "alt": "AT",
+      "pileup_bases": "G+1t",
+      "expected": {
+        "ref": 0,
+        "alt": 0,
+        "other": 1,
+        "supported": true
+      },
+      "observed": {
+        "ref": 0,
+        "alt": 1,
+        "other": 0,
+        "supported": true
+      },
+      "matches_expected": false
+    },
+    {
+      "name": "matching_deletion_with_wrong_anchor_is_not_exact_alt",
+      "ref": "AC",
+      "alt": "A",
+      "pileup_bases": "G-1c",
+      "expected": {
+        "ref": 0,
+        "alt": 0,
+        "other": 1,
+        "supported": true
+      },
+      "observed": {
+        "ref": 0,
+        "alt": 1,
+        "other": 0,
+        "supported": true
+      },
+      "matches_expected": false
+    },
+    {
+      "name": "control_matching_anchor_and_insertion",
+      "ref": "A",
+      "alt": "AT",
+      "pileup_bases": ".+1t",
+      "expected": {
+        "ref": 0,
+        "alt": 1,
+        "other": 0,
+        "supported": true
+      },
+      "observed": {
+        "ref": 0,
+        "alt": 1,
+        "other": 0,
+        "supported": true
+      },
+      "matches_expected": true
+    },
+    {
+      "name": "control_matching_anchor_without_indel",
+      "ref": "AC",
+      "alt": "A",
+      "pileup_bases": ".,",
+      "expected": {
+        "ref": 2,
+        "alt": 0,
+        "other": 0,
+        "supported": true
+      },
+      "observed": {
+        "ref": 2,
+        "alt": 0,
+        "other": 0,
+        "supported": true
+      },
+      "matches_expected": true
+    }
+  ],
+  "matching_cases": 2,
+  "mismatching_cases": 4
+}

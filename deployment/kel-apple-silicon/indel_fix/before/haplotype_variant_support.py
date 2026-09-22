@@ -2,9 +2,6 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-import pysam
-from allele_support import count_snv_support, count_indel_support, indel_window
-
 full_vcf = str(snakemake.input.full_vcf)
 phased_vcf = str(snakemake.input.phased_vcf)
 hp1_bam = str(snakemake.input.hp1_bam)
@@ -51,6 +48,72 @@ def variant_type(ref_allele, alt_allele):
     if len(ref_allele) == len(alt_allele):
         return "MNV"
     return "COMPLEX"
+
+
+def observations(bases):
+    out = []
+    i = 0
+    while i < len(bases):
+        c = bases[i]
+        if c == "^":
+            i += 2
+            continue
+        if c == "$":
+            i += 1
+            continue
+        if c in ".,ACGTNacgtn*#<>":
+            obs = {"base": c, "indels": []}
+            i += 1
+            while i < len(bases) and bases[i] in "+-":
+                sign = bases[i]
+                i += 1
+                j = i
+                while j < len(bases) and bases[j].isdigit():
+                    j += 1
+                if j == i:
+                    break
+                n = int(bases[i:j])
+                seq = bases[j:j + n].upper()
+                obs["indels"].append((sign, n, seq))
+                i = j + n
+            out.append(obs)
+            continue
+        i += 1
+    return out
+
+
+def count_support(ref_allele, alt_allele, bases):
+    obs = observations(bases)
+    ref_n = alt_n = other = 0
+
+    if len(ref_allele) == 1 and len(alt_allele) == 1:
+        for item in obs:
+            base = item["base"]
+            if base in ".,":
+                ref_n += 1
+            elif base.upper() == alt_allele.upper():
+                alt_n += 1
+            elif base.upper() in "ACGTN":
+                other += 1
+        return ref_n, alt_n, other, True
+
+    if len(ref_allele) > len(alt_allele) and ref_allele.startswith(alt_allele):
+        deleted = ref_allele[len(alt_allele):].upper()
+        target = ("-", len(deleted), deleted)
+    elif len(alt_allele) > len(ref_allele) and alt_allele.startswith(ref_allele):
+        inserted = alt_allele[len(ref_allele):].upper()
+        target = ("+", len(inserted), inserted)
+    else:
+        return 0, 0, len(obs), False
+
+    for item in obs:
+        if target in item["indels"]:
+            alt_n += 1
+        elif not item["indels"]:
+            ref_n += 1
+        else:
+            other += 1
+    return ref_n, alt_n, other, True
 
 
 def fractions(counts):
@@ -100,49 +163,31 @@ for line in query_lines(
     }
 
 biallelic_records = [r for r in full_records if "," not in r["alt"]]
-snv_records = [r for r in biallelic_records if variant_type(r["ref"], r["alt"]) == "SNV"]
-indel_records = [r for r in biallelic_records if variant_type(r["ref"], r["alt"]) in {"INS", "DEL"}]
-
-# A single pileup anchor cannot establish exact indel REF support. Compare
-# full aligned allele windows (including equivalent repeat placements) instead.
-indel_counts = {"HP1": {}, "HP2": {}}
-with pysam.FastaFile(ref) as reference:
-    reference_sequences = {r["chrom"]: reference.fetch(r["chrom"]) for r in indel_records}
-    for hp, bam_path in [("HP1", hp1_bam), ("HP2", hp2_bam)]:
-        with pysam.AlignmentFile(bam_path, "rb") as bam:
-            for r in indel_records:
-                key = (r["chrom"], r["pos"], r["ref"], r["alt"])
-                window = indel_window(reference_sequences[r["chrom"]], r["pos"] - 1, r["ref"], r["alt"])
-                indel_counts[hp][key] = (
-                    count_indel_support(bam, r["chrom"], window)
-                    if window is not None else (0, 0, 0, False)
-                )
 
 with tempfile.TemporaryDirectory(prefix="hap_support_") as tmpdir:
     tmpdir = Path(tmpdir)
     sites_bed = tmpdir / "sites.bed"
     with sites_bed.open("w") as handle:
-        for r in snv_records:
+        for r in biallelic_records:
             handle.write(f'{r["chrom"]}\t{r["pos"] - 1}\t{r["pos"]}\n')
 
     pileups = {}
     for hp, bam in [("HP1", hp1_bam), ("HP2", hp2_bam)]:
         pileup_path = tmpdir / f"{hp}.pileup"
         with pileup_path.open("w") as out_handle:
-            if snv_records:
-                run([
-                    "samtools", "mpileup",
-                    "-B", "-Q", "0", "-q", "0",
-                    "-d", str(mpileup_max_depth),
-                    "-f", ref,
-                    "-l", str(sites_bed),
-                    bam,
-                ], stdout=out_handle)
+            run([
+                "samtools", "mpileup",
+                "-B", "-Q", "0", "-q", "0",
+                "-d", str(mpileup_max_depth),
+                "-f", ref,
+                "-l", str(sites_bed),
+                bam,
+            ], stdout=out_handle)
         data = {}
         with pileup_path.open() as handle:
             for line in handle:
                 fields = line.rstrip("\n").split("\t")
-                if len(fields) >= 5 and int(fields[3]) > 0:
+                if len(fields) >= 5:
                     data[(fields[0], int(fields[1]))] = fields[4]
         pileups[hp] = data
 
@@ -161,11 +206,8 @@ with tempfile.TemporaryDirectory(prefix="hap_support_") as tmpdir:
         parser_supported = False
         if vtype != "MULTIALLELIC":
             for hp in ("HP1", "HP2"):
-                if vtype in {"INS", "DEL"}:
-                    ref_n, alt_n, other, supported = indel_counts[hp][key]
-                else:
-                    bases = pileups[hp].get((r["chrom"], r["pos"]), "")
-                    ref_n, alt_n, other, supported = count_snv_support(r["ref"], r["alt"], bases)
+                bases = pileups[hp].get((r["chrom"], r["pos"]), "")
+                ref_n, alt_n, other, supported = count_support(r["ref"], r["alt"], bases)
                 parser_supported = parser_supported or supported
                 alt_frac, other_frac, exact_depth = fractions((ref_n, alt_n, other))
                 hp_values[hp] = {
@@ -263,7 +305,7 @@ with tempfile.TemporaryDirectory(prefix="hap_support_") as tmpdir:
         "CHROM", "POS", "REF", "ALT", "QUAL", "FILTER", "ORIGINAL_GT", "PHASED_GT", "PS", "TYPE",
         "HP1_REF", "HP1_ALT", "HP1_OTHER", "HP1_ALT_FRAC", "HP1_OTHER_FRAC",
         "HP2_REF", "HP2_ALT", "HP2_OTHER", "HP2_ALT_FRAC", "HP2_OTHER_FRAC",
-        "ALT_FRAC_DELTA", "STATUS", "REASON", "SUPPORT_METHOD",
+        "ALT_FRAC_DELTA", "STATUS", "REASON",
     ]
 
     def fmt(value):
@@ -282,7 +324,6 @@ with tempfile.TemporaryDirectory(prefix="hap_support_") as tmpdir:
             row["hp2"]["ref"], row["hp2"]["alt"], row["hp2"]["other"],
             row["hp2"]["alt_frac"], row["hp2"]["other_frac"],
             row["delta"], row["status"], row["reason"],
-            "aligned_allele_window" if row["type"] in {"INS", "DEL"} else "pileup_base" if row["type"] == "SNV" else "unsupported",
         ]
 
     with support_tsv.open("w") as handle:

@@ -1,0 +1,47 @@
+samples: "../setup/smoke/samples.tsv"
+
+workflow:
+  run_variant_calling: false
+  run_phasing: false
+  run_haplotype_reconstruction: false
+  run_consensus: false
+
+filtering:
+  enabled: false
+  min_length: 1000
+  max_length: 30000
+  min_mean_q: 8
+  keep_percent: 100
+
+mapping:
+  preset: "map-ont"
+  threads: 2
+  variant_min_mapq: 30
+  phasing_min_mapq: 30
+  phasing_min_length: 8000
+
+qc:
+  core_depth_threshold: 3
+  nanoplot_no_static: true
+
+clair3:
+  require_target_regions: true
+  threads: 2
+  platform: "ont"
+  model_name: "r1041_e82_400bps_hac_v520"
+  executable: "run_clair3.sh"
+  extra: ""
+
+phasing:
+  threads: 2
+
+haplotypes:
+  threads: 2
+  callable_min_depth: 50
+  min_support_depth: 20
+  min_het_alt_fraction: 0.30
+  min_het_delta: 0.25
+  min_hom_alt_fraction: 0.80
+  max_other_fraction: 0.25
+  require_pass: true
+  mpileup_max_depth: 100000

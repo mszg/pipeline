@@ -65,7 +65,19 @@ reference-guided HP1 / HP2 consensus
 
 ## v0.6 — haplotagging and conservative haplotype reconstruction
 
-v0.6 adds a validated reconstruction stage after v0.5 phasing. WhatsHap `haplotag` assigns phase-informative reads to HP1 or HP2 using the phased biallelic VCF. The workflow then measures target coverage separately for the two haplotypes and evaluates every biallelic candidate using exact REF/ALT support in the HP1 and HP2 read sets.
+The [KEL Apple Silicon bundle](deployment/kel-apple-silicon/README.md) contains
+tested setup wrappers, native environment locks, audit/verification scripts,
+smoke drivers and selected execution evidence. Its instructions retain the
+sibling `setup/` and `workflow/` layout used by the KEL configs.
+The [complete feature and change description](docs/changes/KEL_apple_silicon_features.md)
+lists the implementation changes, retained pipeline capabilities, tests, observed
+KEL results and validation limits.
+
+v0.6 adds reconstruction after v0.5 phasing; historical ABO results are summarized below. The KEL code audit found and repaired indel-support and deletion-masking defects; see [KEL revalidation](docs/validation/KEL_indel_revalidation.md) for current executable evidence and limits. WhatsHap `haplotag` assigns phase-informative reads to HP1 or HP2 using the phased biallelic VCF. The workflow then measures target coverage separately for the two haplotypes and evaluates every biallelic candidate using exact REF/ALT support in the HP1 and HP2 read sets.
+
+Reconstruction now requires exactly one informative phase set per target contig. Missing phase sets, multiple disconnected blocks, or a target contig without phased heterozygotes fail before haplotagging. Independent contigs have independent HP orientations. The check is recorded in `phase_set_validation.tsv`.
+
+Small normalized insertions/deletions use aligned read sequence across the full allele window, including equivalent repeat placements and an aligned right flank. Wrong anchors, partial reads, ambiguous bases and conflicting sequence count as OTHER. Nearby variation within the window can conservatively make an observation OTHER. Complex alleles and indels without a usable right flank remain unresolved. SNVs use strict pileup base support; placeholders, reference skips and competing indel events are OTHER. The support TSV includes `SUPPORT_METHOD`. The `mpileup_max_depth` setting applies to SNVs; indel counting includes all eligible primary reads in each HP BAM.
 
 The consensus stage does **not** use a hard global QUAL cutoff. During real-data validation, low-QUAL heterozygous SNVs could show reproducible haplotype-specific support, while several nominal homozygous-alt indels showed conflicting repeat-associated evidence. Instead, v0.6 uses configurable support criteria and classifies variants as `ACCEPT` or `UNRESOLVED`.
 
@@ -168,7 +180,14 @@ results/consensus/<analysis>/<analysis>.haplotype1.fasta
 results/consensus/<analysis>/<analysis>.haplotype2.fasta
 ```
 
-The consensus FASTAs are reference-guided haplotype consensuses, not de novo assemblies. Sequence outside the primer-defined target, positions below the haplotype-specific callable-depth threshold, and unresolved variant spans are masked with `N`. For an unresolved insertion, the reference anchor is masked and the complete ambiguity remains documented in `uncertain_variants.tsv`.
+The consensus FASTAs are reference-guided haplotype consensuses, not de novo assemblies. Sequence outside the primer-defined target, positions below the haplotype-specific callable-depth threshold, and unresolved variant spans are masked with `N`. An accepted deletion can exempt its deleted positions from the low-base-depth mask only on its ALT haplotype, with at least `callable_min_depth` exact ALT reads, a callable anchor, and no outside-target or uncertainty mask anywhere in its REF span. This permits supported deletions with zero aligned bases at deleted positions to be applied. For an unresolved insertion, the reference anchor is masked and the complete ambiguity remains documented in `uncertain_variants.tsv`.
+
+Run focused regressions in an environment with Python, pysam, samtools, bcftools and tabix:
+
+```bash
+python -m unittest discover -s test -p 'test_*.py' -v
+python test/integration_haplotype_consensus.py
+```
 
 ## Running the workflow
 

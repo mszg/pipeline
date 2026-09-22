@@ -1,0 +1,124 @@
+Config file config/config.yaml is extended by additional config specified via the command line.
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-09-21 19:48:59
+  Workflow ID: c1a3c3b9-d226-4bb2-b969-170eb152c192
+  Platform: macOS-26.6.2-arm64-arm-64bit
+  Host: MacBook-Air-von-Gergo.local
+  User: mszg
+  Snakemake version: 9.27.0
+  Python version: 3.12.14 (main, Sep  3 2026, 03:46:19) [Clang 21.1.8 ]
+  Command: <WORKSPACE>/setup/envs/kel-native/bin/snakemake --cores 2 --scheduler greedy --rerun-incomplete all --configfile config/kel.yaml config/kel.calling.yaml config/kel.reconstruction.yaml --printshellcmds
+  Snakefile: <WORKSPACE>/workflow/Snakefile
+  Base directory: <WORKSPACE>/workflow
+  Run directory: <WORKSPACE>/workflow
+  Working directory: <WORKSPACE>/workflow
+  Config file(s): [PosixPath('<WORKSPACE>/workflow/config/kel.yaml'), PosixPath('<WORKSPACE>/workflow/config/kel.calling.yaml'), PosixPath('<WORKSPACE>/workflow/config/kel.reconstruction.yaml'), 'config/config.yaml']
+  Config MD5: 99527d100efb04fe3039ffe40cfea2af
+
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Job stats:
+job                     count
+--------------------  -------
+consensus_mask_hp1          1
+consensus_mask_hp2          1
+consensus_haplotype1        1
+consensus_haplotype2        1
+all                         1
+total                       5
+
+Select jobs to execute...
+Execute 2 jobs...
+
+[Mon Sep 21 19:48:59 2026]
+localrule consensus_mask_hp2:
+    input: results/reference/KEL__KEL/reference.fasta.fai, results/targets/KEL__KEL/KEL__KEL.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP2.low_depth.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed
+    jobid: 61
+    reason: Code has changed since last execution
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+
+[Mon Sep 21 19:48:59 2026]
+localrule consensus_mask_hp1:
+    input: results/reference/KEL__KEL/reference.fasta.fai, results/targets/KEL__KEL/KEL__KEL.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_regions.bed, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.HP1.low_depth.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed
+    jobid: 59
+    reason: Code has changed since last execution
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+[Mon Sep 21 19:48:59 2026]
+Finished jobid: 61 (Rule: consensus_mask_hp2)
+1 of 5 steps (20%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 19:48:59 2026]
+localrule consensus_haplotype2:
+    input: results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/reference/KEL__KEL/reference.fasta, results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+    jobid: 60
+    reason: Input files updated by another job: results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/consensus/KEL__KEL
+        if [ -s results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed ]; then
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 2 -m results/consensus/KEL__KEL/KEL__KEL.HP2.mask.bed results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+        else
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 2 results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+        fi
+
+[Mon Sep 21 19:48:59 2026]
+Finished jobid: 59 (Rule: consensus_mask_hp1)
+2 of 5 steps (40%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 19:48:59 2026]
+localrule consensus_haplotype1:
+    input: results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/reference/KEL__KEL/reference.fasta, results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed
+    output: results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta
+    jobid: 58
+    reason: Input files updated by another job: results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/consensus/KEL__KEL
+        if [ -s results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed ]; then
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 1 -m results/consensus/KEL__KEL/KEL__KEL.HP1.mask.bed results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta
+        else
+            bcftools consensus -f results/reference/KEL__KEL/reference.fasta -H 1 results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz > results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta
+        fi
+
+Applied 31 variants
+Applied 5 variants
+[Mon Sep 21 19:48:59 2026]
+Finished jobid: 60 (Rule: consensus_haplotype2)
+3 of 5 steps (60%) done
+[Mon Sep 21 19:48:59 2026]
+Finished jobid: 58 (Rule: consensus_haplotype1)
+4 of 5 steps (80%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 19:48:59 2026]
+localrule all:
+    input: results/summary/input_manifest.tsv, results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz, results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz, results/qc/raw/KEL__KEL__fragment1/NanoStats.txt, results/qc/raw/KEL__KEL__fragment2/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.length_mapq.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.length_mapq.tsv, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv, results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai, results/targets/KEL__KEL/KEL__KEL.bed, results/targets/KEL__KEL/KEL__KEL.target_regions.tsv, results/summary/amplicon_summary.tsv, results/summary/gene_summary.tsv, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi, results/qc/phasing/KEL__KEL/KEL__KEL.phasing_qc.tsv, results/haplotypes/KEL__KEL/KEL__KEL.haplotagged.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP1.bam.bai, results/haplotypes/KEL__KEL/KEL__KEL.HP2.bam.bai, results/qc/haplotypes/KEL__KEL/KEL__KEL.haplotag_qc.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.coverage_qc.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.variant_support.tsv, results/qc/haplotypes/KEL__KEL/KEL__KEL.uncertain_variants.tsv, results/variants/KEL__KEL/KEL__KEL.consensus_ready.vcf.gz.tbi, results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta, results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta
+    jobid: 0
+    reason: Input files updated by another job: results/consensus/KEL__KEL/KEL__KEL.haplotype2.fasta, results/consensus/KEL__KEL/KEL__KEL.haplotype1.fasta
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+[Mon Sep 21 19:48:59 2026]
+Finished jobid: 0 (Rule: all)
+5 of 5 steps (100%) done
+Complete log(s): <WORKSPACE>/workflow/.snakemake/log/2026-09-21T194859.051118.snakemake.log
+Elapsed time: 0:00:00.658776

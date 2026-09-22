@@ -1,0 +1,43 @@
+test_ambiguous_base_and_extra_event (test_allele_support.IndelSupportTests.test_ambiguous_base_and_extra_event) ... ok
+test_clipped_or_incomplete_windows (test_allele_support.IndelSupportTests.test_clipped_or_incomplete_windows) ... ok
+test_equal_and_mismatch_cigar_ops (test_allele_support.IndelSupportTests.test_equal_and_mismatch_cigar_ops) ... ok
+test_exact_deletion (test_allele_support.IndelSupportTests.test_exact_deletion) ... ok
+test_exact_insertion (test_allele_support.IndelSupportTests.test_exact_insertion) ... ok
+test_homopolymer_repeat_and_wrong_repeat_length (test_allele_support.IndelSupportTests.test_homopolymer_repeat_and_wrong_repeat_length) ... ok
+test_insertion_needs_observed_right_flank (test_allele_support.IndelSupportTests.test_insertion_needs_observed_right_flank) ... ok
+test_long_deletion_and_insertion (test_allele_support.IndelSupportTests.test_long_deletion_and_insertion) ... ok
+test_missing_anchor_or_reference_skip (test_allele_support.IndelSupportTests.test_missing_anchor_or_reference_skip) ... ok
+test_real_indexed_bam_filters_and_counts (test_allele_support.IndelSupportTests.test_real_indexed_bam_filters_and_counts) ... ok
+test_reference_requires_exact_deleted_bases (test_allele_support.IndelSupportTests.test_reference_requires_exact_deleted_bases) ... ok
+test_repeat_shifted_deletion_is_alt_not_reference (test_allele_support.IndelSupportTests.test_repeat_shifted_deletion_is_alt_not_reference) ... ok
+test_repeat_shifted_insertion_is_alt (test_allele_support.IndelSupportTests.test_repeat_shifted_insertion_is_alt) ... ok
+test_reverse_strand_uses_bam_orientation (test_allele_support.IndelSupportTests.test_reverse_strand_uses_bam_orientation) ... ok
+test_soft_clip_outside_window_is_allowed (test_allele_support.IndelSupportTests.test_soft_clip_outside_window_is_allowed) ... ok
+test_unsupported_or_no_reference_flank (test_allele_support.IndelSupportTests.test_unsupported_or_no_reference_flank) ... ok
+test_wrong_anchor_never_exact_reference_or_alternate (test_allele_support.IndelSupportTests.test_wrong_anchor_never_exact_reference_or_alternate) ... ok
+test_adjacent_indel_is_not_simple_snv_support (test_allele_support.PileupTests.test_adjacent_indel_is_not_simple_snv_support) ... ok
+test_anchor_only_indel_support_is_unsupported (test_allele_support.PileupTests.test_anchor_only_indel_support_is_unsupported) ... ok
+test_malformed_pileup_fails (test_allele_support.PileupTests.test_malformed_pileup_fails) ... ok
+test_snv_forward_reverse_and_placeholders (test_allele_support.PileupTests.test_snv_forward_reverse_and_placeholders) ... ok
+test_start_end_and_multi_digit_indels (test_allele_support.PileupTests.test_start_end_and_multi_digit_indels) ... ok
+test_accepted_alt_deletion_rescued_at_depth_threshold (test_consensus_masks.ConsensusMaskTests.test_accepted_alt_deletion_rescued_at_depth_threshold) ... ok
+test_low_depth_anchor_prevents_deleted_base_rescue (test_consensus_masks.ConsensusMaskTests.test_low_depth_anchor_prevents_deleted_base_rescue) ... ok
+test_low_support_stays_masked (test_consensus_masks.ConsensusMaskTests.test_low_support_stays_masked) ... ok
+test_outside_target_anchor_prevents_deleted_base_rescue (test_consensus_masks.ConsensusMaskTests.test_outside_target_anchor_prevents_deleted_base_rescue) ... ok
+test_outside_target_cannot_be_rescued (test_consensus_masks.ConsensusMaskTests.test_outside_target_cannot_be_rescued) ... ok
+test_partial_uncertainty_blocks_entire_deletion_rescue (test_consensus_masks.ConsensusMaskTests.test_partial_uncertainty_blocks_entire_deletion_rescue) ... ok
+test_reference_haplotype_stays_masked (test_consensus_masks.ConsensusMaskTests.test_reference_haplotype_stays_masked) ... ok
+test_uncertain_anchor_prevents_deleted_base_rescue (test_consensus_masks.ConsensusMaskTests.test_uncertain_anchor_prevents_deleted_base_rescue) ... ok
+test_uncertainty_mask_cannot_be_rescued (test_consensus_masks.ConsensusMaskTests.test_uncertainty_mask_cannot_be_rescued) ... ok
+test_unresolved_stays_masked (test_consensus_masks.ConsensusMaskTests.test_unresolved_stays_masked) ... ok
+test_different_contigs_may_have_different_phase_sets (test_phase_sets.PhaseSetTests.test_different_contigs_may_have_different_phase_sets) ... ok
+test_missing_ps_fails (test_phase_sets.PhaseSetTests.test_missing_ps_fails) ... ok
+test_multiple_phase_sets_fail (test_phase_sets.PhaseSetTests.test_multiple_phase_sets_fail) ... ok
+test_no_informative_phasing_fails (test_phase_sets.PhaseSetTests.test_no_informative_phasing_fails) ... ok
+test_sample_mismatch_fails (test_phase_sets.PhaseSetTests.test_sample_mismatch_fails) ... ok
+test_single_connected_set_and_unphased_het (test_phase_sets.PhaseSetTests.test_single_connected_set_and_unphased_het) ... ok
+
+----------------------------------------------------------------------
+Ran 38 tests in 0.019s
+
+OK

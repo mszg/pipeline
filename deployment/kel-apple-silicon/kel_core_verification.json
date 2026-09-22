@@ -1,0 +1,230 @@
+{
+  "scope": "KEL core outputs and original-file preservation",
+  "sources": [
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_0.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_1.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_2.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_3.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_4.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_5.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_6.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_7.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_8.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_9.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_10.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_11.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_12.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_13.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_14.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_15.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_16.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_17.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_1/FBC37073_pass_barcode84_ac548b99_ec3456cd_18.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_0.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_1.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_3.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_4.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_6.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_7.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_8.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_9.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_10.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_11.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_12.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_13.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_14.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_15.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_16.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_17.fastq.gz",
+      "sha256_unchanged": true
+    },
+    {
+      "file": "KEL_Fragment_2/FBC37073_pass_barcode72_ac548b99_ec3456cd_18.fastq.gz",
+      "sha256_unchanged": true
+    }
+  ],
+  "amplicons": [
+    {
+      "unit": "KEL__KEL__fragment1",
+      "input_reads": 81099,
+      "primary_mapped": 74571,
+      "sorted.bam": {
+        "mapped_alignment_records": 246848,
+        "unmapped_alignment_records": 6528
+      },
+      "variant.bam": {
+        "mapped_alignment_records": 54548,
+        "unmapped_alignment_records": 0,
+        "filter_constraints_verified_reads": 54548
+      },
+      "phasing.bam": {
+        "mapped_alignment_records": 15484,
+        "unmapped_alignment_records": 0,
+        "filter_constraints_verified_reads": 15484
+      },
+      "target_depth": {
+        "positions": 14892,
+        "min": 75,
+        "mean": 14012.509871071716,
+        "zero_depth": 0,
+        "below_20": 0,
+        "below_50": 0
+      },
+      "fraction_depth_outside_designated_amplicon": 0.006282468404092839
+    },
+    {
+      "unit": "KEL__KEL__fragment2",
+      "input_reads": 318004,
+      "primary_mapped": 279035,
+      "sorted.bam": {
+        "mapped_alignment_records": 496518,
+        "unmapped_alignment_records": 38969
+      },
+      "variant.bam": {
+        "mapped_alignment_records": 249972,
+        "unmapped_alignment_records": 0,
+        "filter_constraints_verified_reads": 249972
+      },
+      "phasing.bam": {
+        "mapped_alignment_records": 70406,
+        "unmapped_alignment_records": 0,
+        "filter_constraints_verified_reads": 70406
+      },
+      "target_depth": {
+        "positions": 13945,
+        "min": 5711,
+        "mean": 92970.73789888849,
+        "zero_depth": 0,
+        "below_20": 0,
+        "below_50": 0
+      },
+      "fraction_depth_outside_designated_amplicon": 0.009125629191864356
+    }
+  ],
+  "target_union_bases": 27613,
+  "overlap_bases": 1224,
+  "combined_variant_target_depth": {
+    "positions": 27613,
+    "min": 5713,
+    "mean": 54988.94998732481,
+    "zero_depth": 0,
+    "below_20": 0,
+    "below_50": 0
+  },
+  "merged.bam": {
+    "mapped_alignment_records": 743366,
+    "unmapped_alignment_records": 45497
+  },
+  "variant.bam": {
+    "mapped_alignment_records": 304520,
+    "unmapped_alignment_records": 0
+  },
+  "phasing.bam": {
+    "mapped_alignment_records": 85890,
+    "unmapped_alignment_records": 0
+  },
+  "status": "PASS"
+}

@@ -8,12 +8,15 @@ rule nanoplot_raw:
     conda:
         "../envs/qc.yaml"
     threads: 4
+    params:
+        static_option=lambda wc: "--no_static" if config.get("qc", {}).get("nanoplot_no_static", False) else ""
     shell:
         r"""
         mkdir -p results/qc/raw/{wildcards.unit} results/logs/qc
         NanoPlot --fastq {input.fastq:q} \
             --outdir results/qc/raw/{wildcards.unit} \
             --threads {threads} \
+            {params.static_option} \
             > {log:q} 2>&1
         test -s {output.stats:q}
         """
