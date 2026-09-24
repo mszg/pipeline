@@ -148,3 +148,45 @@ The validation supports the following conservative reconstruction rules:
 - mask unresolved spans, low-depth positions and sequence outside the primer-defined target with `N` in the reference-guided haplotype FASTAs.
 
 The v0.6 defaults derived from this validation are `callable_min_depth=50`, `min_support_depth=20`, `min_het_alt_fraction=0.30`, `min_het_delta=0.25`, `min_hom_alt_fraction=0.80`, and `max_other_fraction=0.25`. These values remain configuration parameters and should be revalidated when the assay, chemistry, basecaller, amplicon design, or application changes materially.
+
+
+## Consensus round-trip validation
+
+The final reference-guided HP1 and HP2 FASTAs were independently remapped to `NG_006669.2` with minimap2 using an assembly-to-reference alignment preset. Each haplotype produced exactly one primary alignment, with no secondary or supplementary alignments.
+
+Expected variants were derived directly from the consensus-ready phased VCF and compared with variants recovered from the remapped haplotype FASTAs.
+
+```text
+HP1 expected variants      48
+HP1 SNVs recovered         45/45
+HP1 indels confirmed        3/3
+HP1 unexpected variants     0
+
+HP2 expected variants      26
+HP2 SNVs recovered         24/24
+HP2 indels confirmed        2/2
+HP2 unexpected variants     0
+```
+
+The five indels not re-called by haploid `bcftools mpileup/call` from the single synthetic consensus alignment were confirmed directly in the alignment/pileup at the expected positions and with the expected sequence changes:
+
+```text
+HP1
+24742  CACAG>C
+25504  CACAG>C
+28334  T>TGAGGC
+
+HP2
+15704  A>ACAGTTTGG
+24543  AC>A
+```
+
+Thus, all expected accepted alleles were present on the intended reconstructed haplotype and no unexpected sequence variants were introduced by the consensus-generation step.
+
+## Biological interpretation and sample origin
+
+The phased ABO coding pattern contains a coherent A-like haplotype and a coherent B-like haplotype. The B-associated coding markers occur with the same phase orientation, supporting a conventional AB-type ABO genotype for P001.
+
+P001 originates from the Promega Human Genomic DNA control used for this validation dataset.
+
+This biological interpretation is recorded separately from the computational validation: the workflow reconstruction remains based on the sequence evidence, while the Promega control provides the sample provenance for the P001 validation run.
