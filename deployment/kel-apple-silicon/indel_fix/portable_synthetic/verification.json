@@ -1,0 +1,33 @@
+{
+  "scope": "Synthetic exact-allele, uncertainty and consensus integration; not assay accuracy",
+  "support_statuses": {
+    "51": "ACCEPT",
+    "101": "ACCEPT",
+    "201": "ACCEPT",
+    "301": "UNRESOLVED",
+    "401": "UNRESOLVED",
+    "451": "UNRESOLVED"
+  },
+  "consensus": {
+    "HP1": {
+      "length": 500,
+      "expected_length": 500,
+      "exact_sequence_match": true
+    },
+    "HP2": {
+      "length": 500,
+      "expected_length": 500,
+      "exact_sequence_match": true
+    }
+  },
+  "blocked_deletion_anchor": {
+    "exact_sequence_match": true,
+    "masked_positions_0based": [
+      10,
+      11
+    ],
+    "length": 20,
+    "expected_length": 20
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,35 @@
+[mpileup] 1 samples in 1 input files
+[mpileup] 1 samples in 1 input files
+Applied 0 variants
+Applied 2 variants
+{
+  "scope": "Synthetic exact-allele, uncertainty and consensus integration; not assay accuracy",
+  "support_statuses": {
+    "51": "ACCEPT",
+    "101": "ACCEPT",
+    "201": "ACCEPT",
+    "301": "UNRESOLVED",
+    "401": "UNRESOLVED",
+    "451": "UNRESOLVED"
+  },
+  "consensus": {
+    "HP1": {
+      "length": 500,
+      "expected_length": 500,
+      "exact_sequence_match": true
+    },
+    "HP2": {
+      "length": 501,
+      "expected_length": 500,
+      "exact_sequence_match": false
+    }
+  },
+  "status": "FAIL"
+}
+Traceback (most recent call last):
+  File "<WORKSPACE>/setup/indel_fix/integration_test.py", line 137, in <module>
+    main()
+  File "<WORKSPACE>/setup/indel_fix/integration_test.py", line 133, in main
+    assert result["status"] == "PASS", "Consensus differs from known synthetic haplotype/mask truth"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Consensus differs from known synthetic haplotype/mask truth

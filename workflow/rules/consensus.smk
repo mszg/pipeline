@@ -3,11 +3,15 @@ rule consensus_mask_hp1:
         fai="results/reference/{analysis}/reference.fasta.fai",
         target_bed="results/targets/{analysis}/{analysis}.bed",
         uncertain_bed="results/qc/haplotypes/{analysis}/{analysis}.uncertain_regions.bed",
+        support_tsv="results/qc/haplotypes/{analysis}/{analysis}.variant_support.tsv",
         low_depth_bed="results/qc/haplotypes/{analysis}/{analysis}.HP1.low_depth.bed"
     output:
         bed="results/consensus/{analysis}/{analysis}.HP1.mask.bed"
     conda:
         "../envs/haplotypes.yaml"
+    params:
+        haplotype=1,
+        callable_min_depth=lambda wc: int(config["haplotypes"]["callable_min_depth"])
     script:
         "../scripts/make_consensus_mask.py"
 
@@ -17,11 +21,15 @@ rule consensus_mask_hp2:
         fai="results/reference/{analysis}/reference.fasta.fai",
         target_bed="results/targets/{analysis}/{analysis}.bed",
         uncertain_bed="results/qc/haplotypes/{analysis}/{analysis}.uncertain_regions.bed",
+        support_tsv="results/qc/haplotypes/{analysis}/{analysis}.variant_support.tsv",
         low_depth_bed="results/qc/haplotypes/{analysis}/{analysis}.HP2.low_depth.bed"
     output:
         bed="results/consensus/{analysis}/{analysis}.HP2.mask.bed"
     conda:
         "../envs/haplotypes.yaml"
+    params:
+        haplotype=2,
+        callable_min_depth=lambda wc: int(config["haplotypes"]["callable_min_depth"])
     script:
         "../scripts/make_consensus_mask.py"
 

@@ -1,0 +1,47 @@
+{
+  "started_at": "2026-09-21T11:42:11.667473+00:00",
+  "purpose": "Synthetic execution smoke only, not variant-truth or clinical validation.",
+  "command": [
+    "<WORKSPACE>/setup/run_clair3.sh",
+    "--bam_fn=<WORKSPACE>/setup/smoke/run/results/mapping/genes/SYNTHETIC__TEST/SYNTHETIC__TEST.variant.bam",
+    "--ref_fn=<WORKSPACE>/setup/clair3_smoke/reference.fasta",
+    "--bed_fn=<WORKSPACE>/setup/clair3_smoke/targets.bed",
+    "--threads=2",
+    "--platform=ont",
+    "--model_path=<WORKSPACE>/setup/envs/clair3-arm64/bin/models/r1041_e82_400bps_hac_v520",
+    "--output=<WORKSPACE>/setup/clair3_smoke/output",
+    "--sample_name=SYNTHETIC__TEST",
+    "--var_pct_full=1",
+    "--ref_pct_full=1",
+    "--var_pct_phasing=1",
+    "--enable_variant_calling_at_sequence_head_and_tail"
+  ],
+  "cwd": "<WORKSPACE>/setup/clair3_smoke",
+  "target_bed": "SYNTHETIC_REF\t10999\t12000",
+  "status": "passed",
+  "exit_code": 0,
+  "elapsed_seconds": 16.919,
+  "completed_at": "2026-09-21T11:42:28.607372+00:00",
+  "merged_vcf_exists": true,
+  "vcf_tbi_exists": true,
+  "gzip_valid": true,
+  "vcf_chrom_header": "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSYNTHETIC__TEST",
+  "variant_record_count": 0,
+  "variants": [],
+  "indexed_region_query_exit": 0,
+  "indexed_region_query_records": 0,
+  "indexed_region_query_stderr": "",
+  "pileup_processed_zero_candidate_positions": true,
+  "full_alignment_stage_reached": false,
+  "target_depth_validation": {
+    "bases": 1001,
+    "mean": 48,
+    "min": 48,
+    "max": 48
+  },
+  "execution_limitations": [
+    "Zero candidate positions; pipeline exited after pileup.",
+    "Valid empty VCF confirms operational empty-call handling, not variant detection or full-alignment calling.",
+    "Separate setup/clair3_preflight.json confirms both model CPU forward passes on synthetic tensors."
+  ]
+}

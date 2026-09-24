@@ -1,0 +1,13 @@
+{
+  "clair3_raw_records": 46,
+  "normalized_before_target_filter": 46,
+  "outside_target_after_normalization": [
+    {
+      "contig": "NG_007492.3",
+      "position": 28038,
+      "ref": "A",
+      "alt": "C"
+    }
+  ],
+  "normalized_catalogue_records": 45
+}

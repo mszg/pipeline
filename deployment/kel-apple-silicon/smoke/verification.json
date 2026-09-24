@@ -1,0 +1,18 @@
+{
+  "merged.bam": {
+    "reads": 48,
+    "mapped": 48
+  },
+  "variant.bam": {
+    "reads": 48,
+    "mapped": 48
+  },
+  "phasing.bam": {
+    "reads": 48,
+    "mapped": 48
+  },
+  "staged_reads": 48,
+  "target_union_bases": 22000,
+  "status": "PASS",
+  "scope": "Synthetic core execution only; not biological or variant-calling validation"
+}

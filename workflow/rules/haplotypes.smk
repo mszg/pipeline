@@ -1,5 +1,19 @@
+rule validate_haplotype_phase_sets:
+    input:
+        vcf="results/phasing/{analysis}/{analysis}.phased.vcf.gz",
+        tbi="results/phasing/{analysis}/{analysis}.phased.vcf.gz.tbi",
+        bed="results/targets/{analysis}/{analysis}.bed"
+    output:
+        tsv="results/qc/haplotypes/{analysis}/{analysis}.phase_set_validation.tsv"
+    conda:
+        "../envs/haplotypes.yaml"
+    script:
+        "../scripts/check_phase_sets.py"
+
+
 rule haplotag_reads:
     input:
+        phase_check="results/qc/haplotypes/{analysis}/{analysis}.phase_set_validation.tsv",
         vcf="results/phasing/{analysis}/{analysis}.phased.vcf.gz",
         tbi="results/phasing/{analysis}/{analysis}.phased.vcf.gz.tbi",
         bam="results/mapping/genes/{analysis}/{analysis}.phasing.bam",
@@ -82,6 +96,7 @@ rule haplotype_coverage_qc:
 
 rule haplotype_variant_support:
     input:
+        support_code=str(Path(workflow.basedir) / "workflow/scripts/allele_support.py"),
         full_vcf="results/variants/{analysis}/{analysis}.norm.vcf.gz",
         full_tbi="results/variants/{analysis}/{analysis}.norm.vcf.gz.tbi",
         phased_vcf="results/phasing/{analysis}/{analysis}.phased.vcf.gz",

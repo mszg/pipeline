@@ -1,0 +1,188 @@
+Config file config/config.yaml is extended by additional config specified via the command line.
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-09-21 14:03:29
+  Workflow ID: 5e57a580-59a8-4832-b983-4d46be07b724
+  Platform: macOS-26.6.2-arm64-arm-64bit
+  Host: MacBook-Air-von-Gergo.local
+  User: mszg
+  Snakemake version: 9.27.0
+  Python version: 3.12.14 (main, Sep  3 2026, 03:46:19) [Clang 21.1.8 ]
+  Command: <WORKSPACE>/setup/envs/kel-native/bin/snakemake --cores 2 --scheduler greedy --rerun-incomplete all --configfile config/kel.yaml config/kel.calling.yaml --printshellcmds
+  Snakefile: <WORKSPACE>/workflow/Snakefile
+  Base directory: <WORKSPACE>/workflow
+  Run directory: <WORKSPACE>/workflow
+  Working directory: <WORKSPACE>/workflow
+  Config file(s): [PosixPath('<WORKSPACE>/workflow/config/kel.yaml'), PosixPath('<WORKSPACE>/workflow/config/kel.calling.yaml'), 'config/config.yaml']
+  Config MD5: 2b37d03c24f720a7add067ee30e5a400
+
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Job stats:
+job                            count
+---------------------------  -------
+faidx_reference                    1
+clair3_call                        1
+normalize_variants                 1
+make_phasing_ready_variants        1
+phase_variants                     1
+phasing_qc                         1
+all                                1
+total                              7
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 14:03:30 2026]
+localrule faidx_reference:
+    input: results/reference/KEL__KEL/reference.fasta
+    output: results/reference/KEL__KEL/reference.fasta.fai
+    jobid: 48
+    reason: Missing output files: results/reference/KEL__KEL/reference.fasta.fai
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: samtools faidx results/reference/KEL__KEL/reference.fasta
+[Mon Sep 21 14:03:30 2026]
+Finished jobid: 48 (Rule: faidx_reference)
+1 of 7 steps (14%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 14:03:30 2026]
+localrule clair3_call:
+    input: results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam, results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai, results/reference/KEL__KEL/reference.fasta, results/reference/KEL__KEL/reference.fasta.fai, results/targets/KEL__KEL/KEL__KEL.bed
+    output: results/variants/KEL__KEL/clair3/merge_output.vcf.gz, results/variants/KEL__KEL/clair3/merge_output.vcf.gz.tbi
+    log: results/logs/variants/KEL__KEL.clair3.log
+    jobid: 47
+    reason: Missing output files: results/variants/KEL__KEL/clair3/merge_output.vcf.gz; Input files updated by another job: results/reference/KEL__KEL/reference.fasta.fai
+    wildcards: analysis=KEL__KEL
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/variants/KEL__KEL/clair3 results/logs/variants
+        model_path=../setup/envs/clair3-arm64/bin/models/r1041_e82_400bps_hac_v520
+        if [ -z "$model_path" ]; then
+            model_path="$(dirname "$(command -v ../setup/run_clair3.sh)")/models/r1041_e82_400bps_hac_v520"
+        fi
+        test -d "$model_path"
+        ../setup/run_clair3.sh \
+          --bam_fn=results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam \
+          --ref_fn=results/reference/KEL__KEL/reference.fasta \
+          --threads=2 \
+          --platform=ont \
+          --model_path="$model_path" \
+          --output=results/variants/KEL__KEL/clair3 \
+          --sample_name=KEL__KEL \
+          --bed_fn=results/targets/KEL__KEL/KEL__KEL.bed \
+          --var_pct_full=1 --ref_pct_full=1 --var_pct_phasing=1 --enable_variant_calling_at_sequence_head_and_tail \
+          > results/logs/variants/KEL__KEL.clair3.log 2>&1
+        test -s results/variants/KEL__KEL/clair3/merge_output.vcf.gz
+        test -s results/variants/KEL__KEL/clair3/merge_output.vcf.gz.tbi
+
+[Mon Sep 21 14:06:44 2026]
+Finished jobid: 47 (Rule: clair3_call)
+2 of 7 steps (29%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 14:06:44 2026]
+localrule normalize_variants:
+    input: results/variants/KEL__KEL/clair3/merge_output.vcf.gz, results/reference/KEL__KEL/reference.fasta, results/reference/KEL__KEL/reference.fasta.fai, results/targets/KEL__KEL/KEL__KEL.bed
+    output: results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi
+    jobid: 46
+    reason: Missing output files: results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz; Input files updated by another job: results/reference/KEL__KEL/reference.fasta.fai, results/variants/KEL__KEL/clair3/merge_output.vcf.gz
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        # Preserve multiallelic records in the complete normalized catalogue.
+        # Splitting a 1/2 site into duplicate biallelic positions can make one
+        # record invisible to WhatsHap, as observed during ABO validation.
+        bcftools norm -f results/reference/KEL__KEL/reference.fasta results/variants/KEL__KEL/clair3/merge_output.vcf.gz -Ou \
+          | bcftools view -T results/targets/KEL__KEL/KEL__KEL.bed -Oz -o results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz
+        tabix -f -p vcf results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz
+
+Lines   total/split/joined/realigned/mismatch_removed/dup_removed/skipped:	46/0/0/0/0/0/0
+[Mon Sep 21 14:06:45 2026]
+Finished jobid: 46 (Rule: normalize_variants)
+3 of 7 steps (43%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 14:06:45 2026]
+localrule make_phasing_ready_variants:
+    input: results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi
+    output: results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi
+    jobid: 49
+    reason: Missing output files: results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz; Input files updated by another job: results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        # WhatsHap receives only records with exactly one ALT allele.
+        # The complete normalized VCF remains available for reporting so that
+        # multiallelic candidates are preserved rather than silently lost.
+        bcftools view -m2 -M2 -Oz -o results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz
+        tabix -f -p vcf results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz
+
+[Mon Sep 21 14:06:45 2026]
+Finished jobid: 49 (Rule: make_phasing_ready_variants)
+4 of 7 steps (57%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 14:06:45 2026]
+localrule phase_variants:
+    input: results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai, results/reference/KEL__KEL/reference.fasta
+    output: results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi
+    log: results/logs/phasing/KEL__KEL.whatshap.log
+    jobid: 50
+    reason: Missing output files: results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi; Input files updated by another job: results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz
+    wildcards: analysis=KEL__KEL
+    threads: 2
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command:
+        mkdir -p results/phasing/KEL__KEL results/logs/phasing
+        whatshap phase \
+          --reference results/reference/KEL__KEL/reference.fasta \
+          --output results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz \
+          results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam \
+          > results/logs/phasing/KEL__KEL.whatshap.log 2>&1
+        tabix -f -p vcf results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz
+
+[Mon Sep 21 14:06:58 2026]
+Finished jobid: 50 (Rule: phase_variants)
+5 of 7 steps (71%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 14:06:58 2026]
+localrule phasing_qc:
+    input: results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi
+    output: results/qc/phasing/KEL__KEL/KEL__KEL.phasing_qc.tsv
+    jobid: 51
+    reason: Missing output files: results/qc/phasing/KEL__KEL/KEL__KEL.phasing_qc.tsv; Input files updated by another job: results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi
+    wildcards: analysis=KEL__KEL
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+[Mon Sep 21 14:06:58 2026]
+Finished jobid: 51 (Rule: phasing_qc)
+6 of 7 steps (86%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Sep 21 14:06:58 2026]
+localrule all:
+    input: results/summary/input_manifest.tsv, results/input/KEL__KEL__fragment1/KEL__KEL__fragment1.combined.fastq.gz, results/input/KEL__KEL__fragment2/KEL__KEL__fragment2.combined.fastq.gz, results/qc/raw/KEL__KEL__fragment1/NanoStats.txt, results/qc/raw/KEL__KEL__fragment2/NanoStats.txt, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.sorted.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.coverage.txt, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.coverage.txt, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.alignment_qc.tsv, results/qc/alignment/KEL__KEL__fragment1/KEL__KEL__fragment1.length_mapq.tsv, results/qc/alignment/KEL__KEL__fragment2/KEL__KEL__fragment2.length_mapq.tsv, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.variant.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.phasing.bam.bai, results/mapping/amplicons/KEL__KEL__fragment1/KEL__KEL__fragment1.core_intervals.tsv, results/mapping/amplicons/KEL__KEL__fragment2/KEL__KEL__fragment2.core_intervals.tsv, results/mapping/genes/KEL__KEL/KEL__KEL.merged.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.variant.bam.bai, results/mapping/genes/KEL__KEL/KEL__KEL.variant.coverage.txt, results/mapping/genes/KEL__KEL/KEL__KEL.phasing.bam.bai, results/targets/KEL__KEL/KEL__KEL.bed, results/targets/KEL__KEL/KEL__KEL.target_regions.tsv, results/summary/amplicon_summary.tsv, results/summary/gene_summary.tsv, results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi, results/qc/phasing/KEL__KEL/KEL__KEL.phasing_qc.tsv
+    jobid: 0
+    reason: Input files updated by another job: results/variants/KEL__KEL/KEL__KEL.norm.vcf.gz.tbi, results/qc/phasing/KEL__KEL/KEL__KEL.phasing_qc.tsv, results/phasing/KEL__KEL/KEL__KEL.phased.vcf.gz.tbi, results/variants/KEL__KEL/KEL__KEL.phasing_ready.vcf.gz.tbi
+    resources: tmpdir=/var/folders/01/lrm2cs0j0998j06pyjmvjd880000gn/T
+Shell command: None
+[Mon Sep 21 14:06:58 2026]
+Finished jobid: 0 (Rule: all)
+7 of 7 steps (100%) done
+Complete log(s): <WORKSPACE>/workflow/.snakemake/log/2026-09-21T140329.595153.snakemake.log
+Elapsed time: 0:03:28.877054

@@ -1,0 +1,18 @@
+# Apply after kel.yaml and kel.calling.yaml. Corrected allele support and a
+# mandatory phase-set guard protect the reconstruction stage.
+workflow:
+  run_variant_calling: true
+  run_phasing: true
+  run_haplotype_reconstruction: true
+  run_consensus: true
+haplotypes:
+  threads: 2
+  callable_min_depth: 50
+  min_support_depth: 20
+  min_het_alt_fraction: 0.30
+  min_het_delta: 0.25
+  min_hom_alt_fraction: 0.80
+  max_other_fraction: 0.25
+  require_pass: true
+  # Applies only to SNV mpileup. Indel windows count all eligible aligned reads.
+  mpileup_max_depth: 100000

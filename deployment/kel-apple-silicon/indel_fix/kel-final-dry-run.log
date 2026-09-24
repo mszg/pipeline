@@ -1,0 +1,22 @@
+Config file config/config.yaml is extended by additional config specified via the command line.
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-09-21 19:54:13
+  Workflow ID: a339d240-879c-4532-9813-4c7363dae784
+  Platform: macOS-26.6.2-arm64-arm-64bit
+  Host: MacBook-Air-von-Gergo.local
+  User: mszg
+  Snakemake version: 9.27.0
+  Python version: 3.12.14 (main, Sep  3 2026, 03:46:19) [Clang 21.1.8 ]
+  Command: <WORKSPACE>/setup/envs/kel-native/bin/snakemake --cores 2 --scheduler greedy --rerun-incomplete all --configfile config/kel.yaml config/kel.calling.yaml config/kel.reconstruction.yaml --dry-run
+  Snakefile: <WORKSPACE>/workflow/Snakefile
+  Base directory: <WORKSPACE>/workflow
+  Run directory: <WORKSPACE>/workflow
+  Working directory: <WORKSPACE>/workflow
+  Config file(s): [PosixPath('<WORKSPACE>/workflow/config/kel.yaml'), PosixPath('<WORKSPACE>/workflow/config/kel.calling.yaml'), PosixPath('<WORKSPACE>/workflow/config/kel.reconstruction.yaml'), 'config/config.yaml']
+  Config MD5: 99527d100efb04fe3039ffe40cfea2af
+
+Building DAG of jobs...
+Nothing to be done (all requested files are present and up to date).

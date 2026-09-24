@@ -1,0 +1,169 @@
+{
+  "scope": "Read partition, support accounting, mask and complete consensus consistency; no external biological truth",
+  "read_partition": {
+    "HP1": 32100,
+    "HP2": 21523,
+    "unassigned": 32267
+  },
+  "status_counts": {
+    "ACCEPT": 33,
+    "UNRESOLVED": 12
+  },
+  "accepted_type_counts": {
+    "SNV": 32,
+    "DEL": 1
+  },
+  "unresolved": [
+    {
+      "POS": "624",
+      "REF": "C",
+      "ALT": "CAA",
+      "TYPE": "INS",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "639",
+      "REF": "G",
+      "ALT": "A",
+      "TYPE": "SNV",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "660",
+      "REF": "C",
+      "ALT": "T",
+      "TYPE": "SNV",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "692",
+      "REF": "C",
+      "ALT": "G",
+      "TYPE": "SNV",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "696",
+      "REF": "T",
+      "ALT": "A",
+      "TYPE": "SNV",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "717",
+      "REF": "G",
+      "ALT": "A",
+      "TYPE": "SNV",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "727",
+      "REF": "G",
+      "ALT": "A",
+      "TYPE": "SNV",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "758",
+      "REF": "A",
+      "ALT": "G",
+      "TYPE": "SNV",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "759",
+      "REF": "CA",
+      "ALT": "C",
+      "TYPE": "DEL",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "1688",
+      "REF": "T",
+      "ALT": "TAC",
+      "TYPE": "INS",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "25592",
+      "REF": "CA",
+      "ALT": "C",
+      "TYPE": "DEL",
+      "REASON": "weak_or_conflicting_haplotype_support"
+    },
+    {
+      "POS": "27258",
+      "REF": "AACACACACAC",
+      "ALT": "A,AAC",
+      "TYPE": "MULTIALLELIC",
+      "REASON": "multiallelic_not_routinely_phased"
+    }
+  ],
+  "indel_independent_sample_checks": 200,
+  "consensus": {
+    "HP1": {
+      "length": 28313,
+      "N_bases": 724,
+      "target_masked_reference_bases": 24,
+      "target_unmasked_reference_bases": 27589,
+      "low_depth_reference_bases": 0,
+      "rescued_deletion_reference_bases": 0,
+      "applied_alt_positions": [
+        14029,
+        19983,
+        20030,
+        21908,
+        25183
+      ],
+      "accepted_alt_positions_masked": [],
+      "exact_independent_sequence_match": true,
+      "sha256": "8a32a98dc58d7648cc9fb137374abe4fa5c32719f1bca3d0b0cf49209f095e7b"
+    },
+    "HP2": {
+      "length": 28311,
+      "N_bases": 811,
+      "target_masked_reference_bases": 111,
+      "target_unmasked_reference_bases": 27502,
+      "low_depth_reference_bases": 87,
+      "rescued_deletion_reference_bases": 0,
+      "applied_alt_positions": [
+        516,
+        530,
+        560,
+        571,
+        574,
+        584,
+        589,
+        591,
+        596,
+        599,
+        638,
+        642,
+        645,
+        647,
+        649,
+        658,
+        695,
+        702,
+        714,
+        718,
+        719,
+        722,
+        735,
+        739,
+        762,
+        766,
+        768,
+        10169,
+        19983,
+        20030,
+        25183
+      ],
+      "accepted_alt_positions_masked": [],
+      "exact_independent_sequence_match": true,
+      "sha256": "6763407ae4638fcd4bd4ac5e056988e84c17f8dbbfe88bd19e300f5abd2f56ca"
+    }
+  },
+  "original_files_unchanged": 36,
+  "status": "PASS"
+}
