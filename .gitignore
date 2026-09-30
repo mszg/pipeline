@@ -16,3 +16,20 @@ __pycache__/
 *.pyc
 .vscode/
 .DS_Store
+
+# Private historical evidence retained locally, excluded from source releases
+deployment/kel-apple-silicon/**/*.log
+deployment/kel-apple-silicon/**/*.json
+!deployment/kel-apple-silicon/reference_provenance.json
+/deployment/kel-apple-silicon/RUNBOOK.md
+/deployment/kel-apple-silicon/VALIDATION.md
+/deployment/kel-apple-silicon/indel_fix/leave_one_out/README.md
+/docs/changes/KEL_apple_silicon_features.md
+/docs/validation/KEL_indel_revalidation.md
+/docs/validation/*_ABO_v0.*.md
+/test/SMOKE_TEST_RESULTS.txt
+
+# Local run manifests and reporting/analysis environments
+/config/*.local.tsv
+/config/*.local.yaml
+/.venv/

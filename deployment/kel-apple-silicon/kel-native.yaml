@@ -1,5 +1,7 @@
 # Standalone native core/controller environment; Clair3 needs a separate env.
-# Exact solved packages are in kel-native.osx-arm64.explicit.txt.
+# The historical explicit lock predates reporting and is retained unchanged.
+# This readable specification adds openpyxl; a fresh solve has not been tested.
+# For the lock-based setup, install the pinned reporting wheels as in README.md.
 channels:
   - conda-forge
   - bioconda
@@ -16,3 +18,4 @@ dependencies:
   - bcftools=1.24
   - htslib=1.24
   - whatshap=2.8
+  - openpyxl=3.1.5
