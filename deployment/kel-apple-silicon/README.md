@@ -1,67 +1,81 @@
-# KEL Apple Silicon reproducibility bundle
+# Native Apple Silicon setup sources
 
-This directory versions setup work originally executed beside the repository.
-Deploy it as `setup/` beside a checkout named `workflow/` to use the tested KEL
-config paths. It includes code, environment definitions, exact native package
-locks and selected validation evidence. Installed environments, package/model
-binaries, FASTQs, BAMs, VCFs, consensus FASTAs and full input audits remain local.
+This directory contains setup scripts, readable environment definitions, native
+package locks and synthetic fixtures for macOS arm64. Use it with this release
+checked out as `workflow/`, and deploy a copy as sibling `setup/`. The active
+pipeline rules and scripts remain in the checkout.
 
-`MANIFEST.json` records source and published checksums. Historical machine paths
-in evidence use `<WORKSPACE>`. Three formerly absolute script roots now derive
-from their deployed location. Numerical results and validation scope are
-unchanged. `RUNBOOK.md` contains the original runtime commands; links in deployed
-records use the sibling `setup/` and `workflow/` layout.
+The source release omits historical generated logs, per-sample result documents
+and analysis evidence. Local originals and existing Git history are preserved;
+their removal from this release tree does not erase earlier publications. Real
+FASTQs, BAMs, VCFs, consensus sequences, workbooks, JSON reports, installed
+environments and model binaries must remain local. Public reference/primer
+metadata is retained in [reference_provenance.json](reference_provenance.json).
 
-## Fresh native setup
+## Create the isolated native environments
 
-These instructions require macOS arm64, Git and Conda. The explicit locks target
-`osx-arm64` and `noarch`. Read the pre-install assessment in
-[apple_silicon_compatibility.md](apple_silicon_compatibility.md).
-
-From a fresh workspace:
+These commands assume macOS arm64 and Conda at `/opt/homebrew/bin/conda`.
+Read the historical platform assessment in
+[apple_silicon_compatibility.md](apple_silicon_compatibility.md). From the parent
+of the `workflow/` checkout:
 
 ```bash
-git clone https://github.com/mszg/pipeline.git workflow
 python3 -c 'import shutil; shutil.copytree("workflow/deployment/kel-apple-silicon", "setup")'
 CONDA_PKGS_DIRS="$PWD/setup/conda-pkgs" /opt/homebrew/bin/conda create -y --prefix "$PWD/setup/envs/kel-native" --file setup/kel-native.osx-arm64.explicit.txt
 CONDA_PKGS_DIRS="$PWD/setup/conda-pkgs" /opt/homebrew/bin/conda create -y --prefix "$PWD/setup/envs/clair3-arm64" --file setup/clair3.osx-arm64.explicit.txt
+setup/envs/kel-native/bin/python -m pip install --only-binary=:all: --no-deps 'openpyxl==3.1.5' 'et-xmlfile==2.0.0'
 setup/envs/clair3-arm64/bin/python setup/clair3_preflight.py
 ```
 
-`copytree` refuses an existing `setup` directory. An already validated workspace
-needs no redeployment. Core Python 3.12 supplies Snakemake, minimap2, samtools,
-bcftools, htslib, pysam, WhatsHap, NanoPlot and filtlong. Separate Clair3 2.0.3 uses
-Python 3.11 and bundled PyTorch `pileup.pt`/`full_alignment.pt` HAC v5.2 models.
-The preflight checks native executables, model loading, finite CPU inference and
-workflow CLI compatibility. The YAML files are readable specifications; the
-explicit lock files record the exact packages used, including packaged models.
+`copytree` refuses an existing `setup/` directory. Do not overwrite an established
+workspace; its native environment can receive just the reporting-library install
+command above. The explicit locks record the historical core/caller environments
+before Excel reporting and deliberately remain unchanged. They do not include
+openpyxl or et-xmlfile. The pinned, pure-Python reporting install is an additional
+step; PyYAML is already in the core lock. `kel-native.yaml` now also declares
+openpyxl for a fresh environment solve, but that updated solve has not been tested.
 
-The wrapper requests two cores, uses the greedy scheduler and incomplete-job
-reruns, keeps caches local, and limits BLAS/OpenMP to one thread per process.
-It supplies the isolated tools directly. Using Snakemake's
-`--software-deployment-method conda` instead requires separate validation of the
-rule-specific environments.
+The core environment contains Python 3.12, Snakemake, minimap2, samtools,
+bcftools, pysam, WhatsHap, NanoPlot and filtlong. The separate Clair3 environment
+contains Python 3.11, Clair3 2.0.3 and packaged PyTorch HAC v5.2 models. The
+preflight checks native executables, model loading, finite CPU inference and the
+caller CLI. It writes new local evidence when executed; none is bundled as proof
+that a new installation passed.
 
-## Reference, input audit and staged execution
+`run_snakemake.sh` selects the isolated native tools directly, requests two cores,
+limits BLAS/OpenMP threads and keeps caches under `setup/`. `run_clair3.sh` selects
+the separate caller environment. This wrapper workflow does not automatically
+create the rule-specific Conda environments. The dedicated reporting environment
+in `workflow/envs/evaluation_report.yaml` is available for normal Snakemake Conda
+deployment; a fresh solve/build of that environment was not performed for this
+release.
+
+## Configure KEL inputs and targets
 
 Retrieve NCBI RefSeqGene `NG_007492.3` into
-`workflow/resources/references/KEL_NG_007492.3.fasta`; verify SHA-256
-`488d6efe397c2fc5da5ecc65f43453cf6bc2e465d1c2e9beb8a55eaa5fc0074c`.
-The exact source URL, all four primer-pair checks and target coordinates are in
-[reference_provenance.json](reference_provenance.json). The reference remains a
-local resource following the existing repository ignore policy.
+`workflow/resources/references/KEL_NG_007492.3.fasta`. The archived FASTA file
+SHA-256 is `488d6efe397c2fc5da5ecc65f43453cf6bc2e465d1c2e9beb8a55eaa5fc0074c`.
+[reference_provenance.json](reference_provenance.json) contains the public NCBI
+retrieval URL, primer sequences and reference-coordinate checks. The reference
+is 28,313 bases; primer coordinates are on this accession, not a genome build.
 
-The sample table expects `KEL_Barcodes_72_84 3/KEL_Fragment_1` (barcode84) and
-`KEL_Barcodes_72_84 3/KEL_Fragment_2` (barcode72) beside `workflow/`. Edit only the
-`fastq_input` paths in `workflow/config/kel.samples.tsv` if needed. `KEL` is a
-required technical grouping label for one biological sample. Targets are
-`411-15302` and `14079-28023`; union 27,613 bp, overlap 1,224 bp. The declared and
-observed basecaller is `dna_r10.4.1_e8.2_400bps_hac@v5.2.0`.
+The example `config/kel.samples.tsv` expects input directories
+`data/KEL_Fragment_1` and `data/KEL_Fragment_2` inside the checkout. Configure
+those paths for the intended dataset without moving or modifying sequencing
+originals. Sample metadata and grouping must describe the actual experiment;
+example technical labels do not establish biological identity.
 
-From the workspace root:
+The configured conservative target products are `NG_007492.3:411-15302` and
+`NG_007492.3:14079-28023`, using 1-based inclusive coordinates. Their union is
+27,613 bases, represented by BED `NG_007492.3 410 28023`; the overlap is 1,224
+bases. Confirm that these primer-defined products apply to a new experiment.
+The example caller model is `r1041_e82_400bps_hac_v520`; match it to the actual
+ONT basecalling model.
+
+From the parent workspace, inspect the inputs and dry-run each intended stage
+before execution:
 
 ```bash
-setup/envs/kel-native/bin/python setup/audit_kel_inputs.py --source "KEL_Barcodes_72_84 3" --output setup/input_audit
 bash setup/run_snakemake.sh qc_only --configfile config/kel.yaml --dry-run
 bash setup/run_snakemake.sh all --configfile config/kel.yaml --dry-run
 bash setup/run_snakemake.sh all --configfile config/kel.yaml --printshellcmds
@@ -71,28 +85,47 @@ bash setup/run_snakemake.sh all --configfile config/kel.yaml config/kel.calling.
 bash setup/run_snakemake.sh all --configfile config/kel.yaml config/kel.calling.yaml config/kel.reconstruction.yaml --printshellcmds
 ```
 
-The audit checks full gzip/FASTQ content, hashes, aggregate length/quality/header
-metadata and source size/mtime preservation. It emits no read sequences or
-individual read identifiers. Keep the full generated audits local. KEL disables
-FASTQ filtering/downsampling; MAPQ 30 applies to derived variant/phasing BAMs,
-and the additional 8 kb minimum length applies only to phasing.
+`qc_only` stages inputs and runs raw QC without requiring a reference. `all` now
+includes the final Excel/JSON report for the enabled stages. The KEL example
+keeps FASTQ filtering disabled, uses MAPQ 30 for variant/phasing BAMs and adds an
+8 kb read-length minimum for phasing. The reporting addition does not change
+these filters or caller, phase-guard, support or consensus algorithms.
 
-## Tests and artifact verification
+## Reporting existing outputs
+
+With all requested analysis outputs current, this command regenerates only the
+report; inspect the dry run first:
+
+```bash
+bash setup/run_snakemake.sh evaluation_report --configfile config/kel.yaml config/kel.calling.yaml config/kel.reconstruction.yaml --dry-run
+bash setup/run_snakemake.sh evaluation_report --configfile config/kel.yaml config/kel.calling.yaml config/kel.reconstruction.yaml --forcerun evaluation_report
+```
+
+The report is `workflow/results/reports/pipeline_evaluation.xlsx`, accompanied
+by `pipeline_evaluation.json`. When prerequisites are unavailable, explicitly
+request an incomplete report instead:
+
+```bash
+setup/envs/kel-native/bin/python workflow/workflow/scripts/evaluation_report.py \
+  --partial --workdir workflow \
+  --config workflow/config/config.yaml workflow/config/kel.yaml \
+    workflow/config/kel.calling.yaml workflow/config/kel.reconstruction.yaml
+```
+
+Read the main [reporting documentation](../../README.md) before setting QC
+criteria. Missing evidence or required thresholds prevents PASS; the existing
+per-haplotype depth threshold does not define a validated gene-wide acceptance
+fraction. Execution and technical QC are distinct. No biological genotype/phase
+truth, named-allele interpretation or phenotype prediction is established here.
+
+## Synthetic checks and diagnostic source
+
+The following tests use synthetic data and temporary outputs. They are separate
+from a real-data analysis and do not establish assay sensitivity or specificity:
 
 ```bash
 setup/envs/kel-native/bin/python -m unittest discover -s workflow/test -p 'test_*.py' -v
 PATH="$PWD/setup/envs/kel-native/bin:$PATH" setup/envs/kel-native/bin/python workflow/test/integration_haplotype_consensus.py
-setup/envs/kel-native/bin/python setup/verify_kel_outputs.py
-setup/envs/kel-native/bin/python setup/verify_kel_calling.py
-setup/envs/kel-native/bin/python setup/indel_fix/verify_kel_reconstruction.py
-```
-
-The real-output verifiers require a completed run and locally generated input
-audit; expected KEL counts are dataset-specific. The synthetic integration test
-cleans temporary artifacts by default; `--output /path/to/empty/directory` retains
-them. Optional core and Clair3 smoke drivers are included:
-
-```bash
 setup/envs/kel-native/bin/python setup/smoke/generate_fixture.py
 bash setup/run_snakemake.sh all --directory "$PWD/setup/smoke/run" --configfile "$PWD/setup/smoke/config.yaml" --config samples="$PWD/setup/smoke/samples.tsv" --dry-run
 bash setup/run_snakemake.sh all --directory "$PWD/setup/smoke/run" --configfile "$PWD/setup/smoke/config.yaml" --config samples="$PWD/setup/smoke/samples.tsv" --printshellcmds
@@ -100,33 +133,15 @@ setup/envs/clair3-arm64/bin/python setup/clair3_smoke/run.py
 setup/envs/clair3-arm64/bin/python setup/clair3_candidate_smoke/run.py
 ```
 
-The core fixture has 48 deterministic reads across two overlapping amplicons.
-The first Clair3 smoke checks indexed empty-output execution; the second injects
-three SNVs and checks exact alleles/genotypes through pileup and full alignment
-inference. The scripts write derived fixture/run directories. Historical summary
-JSON files accompany them.
+The core smoke fixture generates deterministic reads across two overlapping
+amplicons. Caller smoke scripts exercise empty-output handling and injected
+variants. The support/consensus integration fixture compares reconstructed
+sequences with known synthetic sequences. These commands generate fresh local
+outputs; historical JSON summaries and logs are excluded from this source tree.
 
-Deeper diagnostics can be rerun after KEL reconstruction:
-
-```bash
-PATH="$PWD/setup/envs/kel-native/bin:$PATH" setup/envs/kel-native/bin/python setup/indel_fix/compare_legacy_kel.py
-setup/envs/kel-native/bin/python setup/indel_fix/leave_one_out.py
-```
-
-The legacy comparison runs archived defective functions against identical HP
-BAMs in scratch outputs. The second diagnostic withholds 560 CCT>C and 714 G>C
-separately from tagging, evaluating support using the original phased genotype.
-Both remained accepted. Site 727 was sensitive to tagging changes and retains
-its production mask. `indel_fix/before/` is historical test material; active
-workflow scripts live under `workflow/workflow/scripts/` in the workspace.
-
-[VALIDATION.md](VALIDATION.md) records 46 successful core jobs, seven calling/
-phasing jobs, 11 reconstruction jobs, the final mask rerun, 38 unit tests, exact
-synthetic consensus checks and leave-one-out diagnostics. The final dry run
-found all outputs current. Of 45 catalogue records, 33 were accepted and 12
-masked as unresolved. Both complete haplotype sequences passed independent
-reconstruction checks; all 36 original FASTQ hashes remained unchanged.
-
-This establishes computational behavior and internal consistency. Independent
-variant/phase truth, switch-error rate, genome-wide mapping specificity and
-representative assay sensitivity/specificity remain outside this evidence.
+Additional audit and historical diagnostic scripts remain available as source.
+They have dataset-specific assumptions and expected values, so they are not
+universal acceptance tests for new samples. `indel_fix/before/` contains archived
+counter implementations for regression comparisons; the active algorithms are
+under the checkout's `workflow/scripts/`. Keep generated audit metadata and all
+real analysis artifacts outside commits and release assets.

@@ -36,3 +36,37 @@ rule gene_summary:
         "../envs/report.yaml"
     script:
         "../scripts/make_gene_summary.py"
+
+
+def evaluation_report_inputs(wc):
+    files = list(analysis_final_targets) + [SAMPLES_TSV]
+    files += [str(Path(workflow.basedir) / "workflow/scripts" / name) for name in
+              ("evaluation_metrics.py", "evaluation_policy.py", "evaluation_workbook.py")]
+    for analysis in ANALYSIS_IDS:
+        files += [f"results/reference/{analysis}/reference.fasta",
+                  f"results/mapping/genes/{analysis}/{analysis}.variant.flagstat.txt",
+                  f"results/mapping/genes/{analysis}/{analysis}.phasing.flagstat.txt"]
+        if run_variants:
+            files.append(f"results/variants/{analysis}/{analysis}.norm.vcf.gz")
+        if run_phasing:
+            files.append(f"results/phasing/{analysis}/{analysis}.phased.vcf.gz")
+        if run_consensus:
+            files += [f"results/consensus/{analysis}/{analysis}.HP{hp}.mask.bed" for hp in (1, 2)]
+    files += [f"results/mapping/amplicons/{unit}/{unit}.variant.depth.tsv" for unit in UNIT_IDS]
+    return list(dict.fromkeys(files))
+
+
+rule evaluation_report:
+    input:
+        evaluation_report_inputs
+    output:
+        xlsx="results/reports/pipeline_evaluation.xlsx",
+        json="results/reports/pipeline_evaluation.json"
+    params:
+        effective_config=lambda wc: dict(config),
+        repository=str(Path(workflow.basedir)),
+        script_dir=str(Path(workflow.basedir) / "workflow/scripts")
+    conda:
+        "../envs/evaluation_report.yaml"
+    script:
+        "../scripts/evaluation_report.py"

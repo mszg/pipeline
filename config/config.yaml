@@ -1,8 +1,8 @@
-# Long-range ONT amplicon pipeline v0.6
+# Long-range ONT amplicon pipeline v0.7
 samples: "config/samples.tsv"
 
 workflow:
-  # v0.6 adds validated haplotagging, haplotype-specific support QC,
+  # Existing haplotagging, haplotype-specific support QC,
   # uncertainty masking and reference-guided haplotype reconstruction.
   run_variant_calling: true
   run_phasing: true
@@ -64,3 +64,24 @@ haplotypes:
   # Raised above samtools mpileup's small default so deep amplicon data are not
   # downsampled during support assessment.
   mpileup_max_depth: 100000
+
+# Reporting-only settings. None of these alter analysis or masking behavior.
+reporting:
+  run_id: null  # Optional text label; per-row manifest run_id takes precedence.
+  depth_thresholds: []  # Additional descriptive breadth levels, not PASS cutoffs.
+  # assessment_depth defaults to haplotypes.callable_min_depth (currently 50).
+  # A gene-wide acceptable breadth fraction has not been validated/configured.
+  qc:
+    sample_types:
+      sample:
+        criteria:
+          target_breadth_fraction:
+            min: null
+            required: true
+            severity: FAIL
+            description: Configure an assay-appropriate gene-wide acceptance fraction; no default cutoff is asserted.
+      positive_control:
+        criteria: {}
+      negative_control:
+        criteria: {}
+    genes: {}

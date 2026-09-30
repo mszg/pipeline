@@ -245,6 +245,11 @@ if run_consensus:
     final_targets += expand("results/consensus/{analysis}/{analysis}.haplotype1.fasta", analysis=ANALYSIS_IDS)
     final_targets += expand("results/consensus/{analysis}/{analysis}.haplotype2.fasta", analysis=ANALYSIS_IDS)
 
+# Snapshot before adding the report to avoid a circular dependency. Reporting
+# never changes any analysis target, filter, caller or reconstruction setting.
+analysis_final_targets = tuple(final_targets)
+final_targets += ["results/reports/pipeline_evaluation.xlsx", "results/reports/pipeline_evaluation.json"]
+
 
 rule all:
     default_target: True
